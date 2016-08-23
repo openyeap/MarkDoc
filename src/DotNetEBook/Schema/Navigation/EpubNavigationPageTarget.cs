@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bzway.EBook.Reader.Epub.Schema.Navigation
+namespace Bzway.EPubBook.Reader.Schema.Navigation
 {
     public class EpubNavigationPageTarget
     {

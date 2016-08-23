@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bzway.EBook.Reader.Epub.Schema.Opf
+namespace Bzway.EPubBook.Reader.Schema.Opf
 {
     public class EpubSpineItemRef
     {

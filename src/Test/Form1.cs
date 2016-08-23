@@ -11,8 +11,8 @@ using System.IO;
 
 using System.Reflection;
 using System.Resources;
-using EPubBook = Bzway.EBook.Writer.EPubBook;
-using NavPoint = Bzway.EBook.Writer.NavPoint;
+using EPubBook = Bzway.EPubBook.WriterBook;
+using NavPoint = Bzway.EPubBook.Writer.NavPoint;
 
 namespace EPUBTest
 {
@@ -151,7 +151,7 @@ namespace EPUBTest
             SaveFileDialog saveFileDialog = new SaveFileDialog();
 
 
-            saveFileDialog.Filter = "epub files (*.epub)|*.epub|All files (*.*)|*.*";
+            saveFileDialog.Filter = "epub files (*)|*|All files (*.*)|*.*";
             saveFileDialog.FilterIndex = 1;
             saveFileDialog.RestoreDirectory = true;
 

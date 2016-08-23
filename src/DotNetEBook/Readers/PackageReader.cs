@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Xml;
-using Bzway.EBook.Reader.Epub.Schema.Opf;
-using Bzway.EBook.Reader.Epub.Utils;
+using Bzway.EPubBook.Reader.Schema.Opf;
+using Bzway.EPubBook.Reader.Utils;
 
-namespace Bzway.EBook.Reader.Epub.Readers
+namespace Bzway.EPubBook.Reader.Readers
 {
     internal static class PackageReader
     {
@@ -14,7 +14,9 @@ namespace Bzway.EBook.Reader.Epub.Readers
         {
             ZipArchiveEntry rootFileEntry = epubArchive.GetEntry(rootFilePath);
             if (rootFileEntry == null)
+            {
                 throw new Exception("EPUB parsing error: root file not found in archive.");
+            }
             XmlDocument containerDocument;
             using (Stream containerStream = rootFileEntry.Open())
                 containerDocument = XmlUtils.LoadDocument(containerStream);
@@ -24,25 +26,36 @@ namespace Bzway.EBook.Reader.Epub.Readers
             EpubPackage result = new EpubPackage();
             string epubVersionValue = packageNode.Attributes["version"].Value;
             if (epubVersionValue == "2.0")
+            {
                 result.EpubVersion = EpubVersion.EPUB_2;
+            }
+            else if (epubVersionValue == "3.0")
+            {
+                result.EpubVersion = EpubVersion.EPUB_3;
+            }
             else
-                if (epubVersionValue == "3.0")
-                    result.EpubVersion = EpubVersion.EPUB_3;
-                else
-                    throw new Exception(String.Format("Unsupported EPUB version: {0}.", epubVersionValue));
+            {
+                throw new Exception(String.Format("Unsupported EPUB version: {0}.", epubVersionValue));
+            }
             XmlNode metadataNode = packageNode.SelectSingleNode("opf:metadata", xmlNamespaceManager);
             if (metadataNode == null)
+            {
                 throw new Exception("EPUB parsing error: metadata not found in the package.");
+            }
             EpubMetadata metadata = ReadMetadata(metadataNode, result.EpubVersion);
             result.Metadata = metadata;
             XmlNode manifestNode = packageNode.SelectSingleNode("opf:manifest", xmlNamespaceManager);
             if (manifestNode == null)
+            {
                 throw new Exception("EPUB parsing error: manifest not found in the package.");
+            }
             EpubManifest manifest = ReadManifest(manifestNode);
             result.Manifest = manifest;
             XmlNode spineNode = packageNode.SelectSingleNode("opf:spine", xmlNamespaceManager);
             if (spineNode == null)
+            {
                 throw new Exception("EPUB parsing error: spine not found in the package.");
+            }
             EpubSpine spine = ReadSpine(spineNode);
             result.Spine = spine;
             XmlNode guideNode = packageNode.SelectSingleNode("opf:guide", xmlNamespaceManager);
@@ -132,12 +145,11 @@ namespace Bzway.EBook.Reader.Epub.Readers
                             EpubMetadataMeta meta = ReadMetadataMetaVersion2(metadataItemNode);
                             result.MetaItems.Add(meta);
                         }
-                        else
-                            if (epubVersion == EpubVersion.EPUB_3)
-                            {
-                                EpubMetadataMeta meta = ReadMetadataMetaVersion3(metadataItemNode);
-                                result.MetaItems.Add(meta);
-                            }
+                        else if (epubVersion == EpubVersion.EPUB_3)
+                        {
+                            EpubMetadataMeta meta = ReadMetadataMetaVersion3(metadataItemNode);
+                            result.MetaItems.Add(meta);
+                        }
                         break;
                 }
             }

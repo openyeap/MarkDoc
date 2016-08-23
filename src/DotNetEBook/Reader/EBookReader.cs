@@ -4,21 +4,21 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using Bzway.EBook.Reader.Epub.Entities;
-using Bzway.EBook.Reader.Epub.Readers;
-using Bzway.EBook.Reader.Epub.Schema.Navigation;
-using Bzway.EBook.Reader.Epub.Schema.Opf;
-using Bzway.EBook.Reader.Epub.Utils;
+using Bzway.EPubBook.Reader.Entities;
+using Bzway.EPubBook.Reader.Readers;
+using Bzway.EPubBook.Reader.Schema.Navigation;
+using Bzway.EPubBook.Reader.Schema.Opf;
+using Bzway.EPubBook.Reader.Utils;
 
-namespace Bzway.EBook.Reader.Epub
+namespace Bzway.EPubBook.Reader
 {
-    public static class EpubReader
+    public static class EBookReader
     {
-        public static EPubBook OpenBook(string filePath)
+        public static EBook OpenBook(string filePath)
         {
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("Specified epub file not found.", filePath);
-            EPubBook book = new EPubBook();
+            EBook book = new EBook();
             book.FilePath = filePath;
             using (ZipArchive epubArchive = ZipFile.OpenRead(filePath))
             {
@@ -33,7 +33,7 @@ namespace Bzway.EBook.Reader.Epub
             return book;
         }
 
-        private static Image LoadCoverImage(EPubBook book)
+        private static Image LoadCoverImage(EBook book)
         {
             List<EpubMetadataMeta> metaItems = book.Schema.Package.Metadata.MetaItems;
             if (metaItems == null || !metaItems.Any())
@@ -53,12 +53,12 @@ namespace Bzway.EBook.Reader.Epub
                 return Image.FromStream(coverImageStream);
         }
 
-        private static List<EpubChapter> LoadChapters(EPubBook book, ZipArchive epubArchive)
+        private static List<EpubChapter> LoadChapters(EBook book, ZipArchive epubArchive)
         {
             return LoadChapters(book, book.Schema.Navigation.NavMap, epubArchive);
         }
 
-        private static List<EpubChapter> LoadChapters(EPubBook book, List<EpubNavigationPoint> navigationPoints, ZipArchive epubArchive)
+        private static List<EpubChapter> LoadChapters(EBook book, List<EpubNavigationPoint> navigationPoints, ZipArchive epubArchive)
         {
             List<EpubChapter> result = new List<EpubChapter>();
             foreach (EpubNavigationPoint navigationPoint in navigationPoints)

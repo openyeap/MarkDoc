@@ -1,7 +1,7 @@
-﻿using Bzway.EBook.Reader.Epub.Schema.Navigation;
-using Bzway.EBook.Reader.Epub.Schema.Opf;
+﻿using Bzway.EPubBook.Reader.Schema.Navigation;
+using Bzway.EPubBook.Reader.Schema.Opf;
 
-namespace Bzway.EBook.Reader.Epub.Entities
+namespace Bzway.EPubBook.Reader.Entities
 {
     public class EpubSchema
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{382299DE-6C02-4587-864F-2218BD3A1935}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bzway.EBook.Writer</RootNamespace>
-    <AssemblyName>DotNetEpub</AssemblyName>
+    <RootNamespace>Bzway.EPubBook.DotNetEBook</RootNamespace>
+    <AssemblyName>DotNetEBook</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\DotNetEpub.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\DotNetEBook.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -57,8 +57,8 @@
     <Compile Include="Entities\EpubContentType.cs" />
     <Compile Include="Entities\EpubSchema.cs" />
     <Compile Include="Entities\EpubTextContentFile.cs" />
-    <Compile Include="EpubBook.cs" />
-    <Compile Include="EpubReader.cs" />
+    <Compile Include="Reader\EBook.cs" />
+    <Compile Include="Reader\EBookReader.cs" />
     <Compile Include="Readers\ContentReader.cs" />
     <Compile Include="Readers\NavigationReader.cs" />
     <Compile Include="Readers\PackageReader.cs" />

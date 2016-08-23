@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Bzway.EBook.Writer
+namespace Bzway.EPubBook.Writer
 {
     /// <summary>
     /// 告诉 EPUB 阅读器哪些文件属于档案

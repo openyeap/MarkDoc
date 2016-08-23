@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Bzway.EBook.Writer
+namespace Bzway.EPubBook.Writer
 {
     /// <summary>
     /// 指定这些文件出现的顺序

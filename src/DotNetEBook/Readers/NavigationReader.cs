@@ -4,11 +4,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Xml;
-using Bzway.EBook.Reader.Epub.Schema.Navigation;
-using Bzway.EBook.Reader.Epub.Schema.Opf;
-using Bzway.EBook.Reader.Epub.Utils;
+using Bzway.EPubBook.Reader.Schema.Navigation;
+using Bzway.EPubBook.Reader.Schema.Opf;
+using Bzway.EPubBook.Reader.Utils;
 
-namespace Bzway.EBook.Reader.Epub.Readers
+namespace Bzway.EPubBook.Reader.Readers
 {
     internal static class NavigationReader
     {

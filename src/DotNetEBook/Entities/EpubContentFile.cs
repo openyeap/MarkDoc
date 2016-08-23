@@ -1,4 +1,4 @@
-﻿namespace Bzway.EBook.Reader.Epub.Entities
+﻿namespace Bzway.EPubBook.Reader.Entities
 {
     public abstract class EpubContentFile
     {

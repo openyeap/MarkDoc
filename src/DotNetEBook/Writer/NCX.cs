@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Bzway.EBook.Writer
+namespace Bzway.EPubBook.Writer
 {
     /// <summary>
     /// NCX 定义了数字图书的目录表。复杂的图书中，目录表通常采用层次结构，包括嵌套的内容、章和节。

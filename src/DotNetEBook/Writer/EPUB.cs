@@ -5,9 +5,9 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Xml.Linq;
-using Bzway.EBook.Writer;
+using Bzway.EPubBook.Writer;
 
-namespace Bzway.EBook.Writer
+namespace Bzway.EPubBook.Writer
 {
     /// <summary>
     /// Main class that represents epub file

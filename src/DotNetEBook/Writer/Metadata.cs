@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Bzway.EBook.Writer;
+using Bzway.EPubBook.Writer;
 using System.Xml.Linq;
 
-namespace Bzway.EBook.Writer
+namespace Bzway.EPubBook.Writer
 {
     /// <summary>
     /// Dublin Core 定义了一组常用的元数据，可用于描述各种不同的数字资料

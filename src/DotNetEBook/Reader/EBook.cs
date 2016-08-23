@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using Bzway.EBook.Reader.Epub.Entities;
+using Bzway.EPubBook.Reader.Entities;
 
-namespace Bzway.EBook.Reader.Epub
+namespace Bzway.EPubBook.Reader
 {
-    public partial class EPubBook
+    public partial class EBook
     {
         public string FilePath { get; set; }
         public string Title { get; set; }
