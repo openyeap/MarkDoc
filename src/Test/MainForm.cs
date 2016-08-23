@@ -11,7 +11,7 @@ using System.IO;
 
 using System.Reflection;
 using System.Resources;
-using EPubBook = Bzway.DotNetBook.WriterBook;
+using EPubBook = Bzway.DotNetBook.ePub.EBook;
 using NavPoint = Bzway.DotNetBook.ePub.NavPoint;
 
 namespace Bzway.DotNetBook.ePub.Test
