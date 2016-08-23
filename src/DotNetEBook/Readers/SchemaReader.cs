@@ -5,12 +5,12 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Bzway.EPubBook.Reader.Entities;
-using Bzway.EPubBook.Reader.Schema.Navigation;
-using Bzway.EPubBook.Reader.Schema.Opf;
-using Bzway.EPubBook.Reader.Utils;
+using Bzway.DotNetBook.ePub.Entities;
+using Bzway.DotNetBook.ePub.Schema.Navigation;
+using Bzway.DotNetBook.ePub.Schema.Opf;
+using Bzway.DotNetBook.ePub.Utils;
 
-namespace Bzway.EPubBook.Reader.Readers
+namespace Bzway.DotNetBook.ePub.Readers
 {
     internal static class SchemaReader
     {

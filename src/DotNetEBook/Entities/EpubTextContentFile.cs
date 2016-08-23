@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bzway.EPubBook.Reader.Entities
+namespace Bzway.DotNetBook.ePub.Entities
 {
     public class EpubTextContentFile : EpubContentFile
     {

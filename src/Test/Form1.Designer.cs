@@ -1,4 +1,4 @@
-﻿namespace EPUBTest
+﻿namespace Bzway.DotNetBook.ePub.Test
 {
     partial class Form1
     {

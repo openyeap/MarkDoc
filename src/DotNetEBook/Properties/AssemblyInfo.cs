@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DotNetEpub")]
-[assembly: AssemblyDescription("ePUB generation for .NET")]
+[assembly: AssemblyDescription("DotNetEpub")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Bluezbox Software")]
+[assembly: AssemblyCompany("DotNetEpub")]
 [assembly: AssemblyProduct("DotNetEpub")]
-[assembly: AssemblyCopyright("Copyright © Bluezbox Software 2011")]
+[assembly: AssemblyCopyright("Copyright © Bzway 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

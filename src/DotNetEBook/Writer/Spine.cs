@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Bzway.EPubBook.Writer
+namespace Bzway.DotNetBook.ePub
 {
     /// <summary>
     /// 指定这些文件出现的顺序
@@ -44,12 +44,12 @@ namespace Bzway.EPubBook.Writer
 
         internal XElement ToElement()
         {
-            XElement element = new XElement(EPubBook.OpfNS + "spine");
+            XElement element = new XElement(EBook.OpfNS + "spine");
             if (!String.IsNullOrEmpty(_toc))
                 element.Add(new XAttribute("toc", _toc));
             foreach (ItemRef r in _itemRefs)
             {
-                var item = new XElement(EPubBook.OpfNS + "itemref", new XAttribute("idref", r.id));
+                var item = new XElement(EBook.OpfNS + "itemref", new XAttribute("idref", r.id));
                 if (!r.linear)
                     item.SetAttributeValue("linear", "no");
                 element.Add(item);

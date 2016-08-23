@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Bzway.EPubBook.Writer
+namespace Bzway.DotNetBook.ePub
 {
     /// <summary>
     /// OPF 内容文件的最后一部分是 guide。这一节是可选的，但最好保留。
@@ -15,7 +15,7 @@ namespace Bzway.EPubBook.Writer
 
         internal Guide()
         {
-            _element = new XElement(EPubBook.OpfNS + "guide");
+            _element = new XElement(EBook.OpfNS + "guide");
         }
 
         internal void AddReference(string href, string type)
@@ -25,7 +25,7 @@ namespace Bzway.EPubBook.Writer
 
         internal void AddReference(string href, string type, string title)
         {
-            var itemref = new XElement(EPubBook.OpfNS + "reference",
+            var itemref = new XElement(EBook.OpfNS + "reference",
                 new XAttribute("href", href), new XAttribute("type", type), new XAttribute("title", title));
             if (!String.IsNullOrEmpty(title))
                 itemref.SetAttributeValue("title", title);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bzway.EPubBook.Reader.Utils
+namespace Bzway.DotNetBook.ePub.Utils
 {
     internal static class ZipPathUtils
     {

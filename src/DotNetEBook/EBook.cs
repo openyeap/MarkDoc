@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using Bzway.DotNetBook.ePub.Entities;
 using System.Xml.Linq;
-using Bzway.EPubBook.Writer;
-
-namespace Bzway.EPubBook.Writer
+using System;
+using System.IO;
+using System.Text;
+using System.Linq;
+namespace Bzway.DotNetBook.ePub
 {
     /// <summary>
     /// Main class that represents epub file
     /// http://www.ibm.com/developerworks/cn/xml/tutorials/x-epubtut/index.html
     /// </summary>
-    public partial class EPubBook
+    public partial class EBook
     {
         static internal XNamespace OpfNS = "http://www.idpf.org/2007/opf";
         static internal XNamespace DcNS = "http://purl.org/dc/elements/1.1/";
@@ -33,7 +32,7 @@ namespace Bzway.EPubBook.Writer
         /// <summary>
         /// Creates new document instance
         /// </summary>
-        public EPubBook()
+        public EBook()
         {
             _metadata = new Metadata();
             _manifest = new Manifest();
@@ -55,7 +54,7 @@ namespace Bzway.EPubBook.Writer
         /// <summary>
         /// Destroys instance. Performs temporary directory clean-up if one has been created
         /// </summary>
-        ~EPubBook()
+        ~EBook()
         {
             if (!String.IsNullOrEmpty(_tempDirectory) && Directory.Exists(_tempDirectory))
                 Directory.Delete(_tempDirectory, true);
@@ -439,7 +438,7 @@ namespace Bzway.EPubBook.Writer
         {
             string fullPath = Path.Combine(GetOpfDirectory(), opfFilePath);
 
-            var packageElement = new XElement(EPubBook.OpfNS + "package", new XAttribute("version", "2.0"), new XAttribute("unique-identifier", "BookId"));
+            var packageElement = new XElement(EBook.OpfNS + "package", new XAttribute("version", "2.0"), new XAttribute("unique-identifier", "BookId"));
 
             packageElement.Add(_metadata.ToElement());
             packageElement.Add(_manifest.ToElement());
@@ -493,5 +492,16 @@ namespace Bzway.EPubBook.Writer
         {
             _guide.AddReference(href, type, title);
         }
+    }
+    public partial class EBook
+    {
+        public string FilePath { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public List<string> AuthorList { get; set; }
+        public EpubSchema Schema { get; set; }
+        public EpubContent Content { get; set; }
+        public Image CoverImage { get; set; }
+        public List<EpubChapter> Chapters { get; set; }
     }
 }

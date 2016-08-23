@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Bzway.EPubBook.Writer
+namespace Bzway.DotNetBook.ePub
 {
     class Item
     {
@@ -19,7 +19,7 @@ namespace Bzway.EPubBook.Writer
 
         internal XElement ToElement()
         {
-            var element = new XElement(EPubBook.OpfNS + "meta");
+            var element = new XElement(EBook.OpfNS + "meta");
             element.SetAttributeValue("name", _name);
             element.SetAttributeValue("content", _value);
 

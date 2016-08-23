@@ -2,9 +2,9 @@
 using System.IO;
 using System.IO.Compression;
 using System.Xml;
-using Bzway.EPubBook.Reader.Utils;
+using Bzway.DotNetBook.ePub.Utils;
 
-namespace Bzway.EPubBook.Reader.Readers
+namespace Bzway.DotNetBook.ePub.Readers
 {
     internal static class RootFilePathReader
     {

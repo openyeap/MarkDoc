@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bzway.EPubBook.Reader.Schema.Opf
+namespace Bzway.DotNetBook.ePub.Schema.Opf
 {
     public class EpubMetadataIdentifier
     {

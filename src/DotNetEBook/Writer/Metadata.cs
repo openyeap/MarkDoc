@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Bzway.EPubBook.Writer;
+using Bzway.DotNetBook.ePub;
 using System.Xml.Linq;
 
-namespace Bzway.EPubBook.Writer
+namespace Bzway.DotNetBook.ePub
 {
     /// <summary>
     /// Dublin Core 定义了一组常用的元数据，可用于描述各种不同的数字资料
@@ -115,7 +115,7 @@ namespace Bzway.EPubBook.Writer
             XNamespace dc = "http://purl.org/dc/elements/1.1/";
             XNamespace opf = "http://www.idpf.org/2007/opf";
 
-            var element = new XElement(EPubBook.OpfNS + "metadata",
+            var element = new XElement(EBook.OpfNS + "metadata",
                 new XAttribute(XNamespace.Xmlns + "dc", dc),
                 new XAttribute(XNamespace.Xmlns + "opf", opf));
 

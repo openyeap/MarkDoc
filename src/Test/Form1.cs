@@ -11,10 +11,10 @@ using System.IO;
 
 using System.Reflection;
 using System.Resources;
-using EPubBook = Bzway.EPubBook.WriterBook;
-using NavPoint = Bzway.EPubBook.Writer.NavPoint;
+using EPubBook = Bzway.DotNetBook.WriterBook;
+using NavPoint = Bzway.DotNetBook.ePub.NavPoint;
 
-namespace EPUBTest
+namespace Bzway.DotNetBook.ePub.Test
 {
     public partial class Form1 : Form
     {
@@ -31,7 +31,7 @@ namespace EPUBTest
             epub.AddTitle(textboxTitle.Text);
             epub.AddLanguage("en");
 
-            String css = EPUBTest.Properties.Resources.style;
+            String css = Bzway.DotNetBook.ePub.Test.Properties.Resources.style;
 
             if (checkBoxFonts.Checked)
             {
@@ -41,20 +41,20 @@ namespace EPUBTest
                 css += "@font-face { font-family : LiberationSerif; font-weight : bold; font-style: normal; src : url(LiberationSerif-Bold.ttf); }\n";
                 css += "@font-face { font-family : LiberationSerif; font-weight : bold; font-style: italic; src : url(LiberationSerif-BoldItalic.ttf); }\n";
 
-                epub.AddData("LiberationSerif-Regular.ttf", EPUBTest.Properties.Resources.LiberationSerif_Regular, "application/octet-stream");
-                epub.AddData("LiberationSerif-Bold.ttf", EPUBTest.Properties.Resources.LiberationSerif_Bold, "application/octet-stream");
-                epub.AddData("LiberationSerif-Italic.ttf", EPUBTest.Properties.Resources.LiberationSerif_Italic, "application/octet-stream");
-                epub.AddData("LiberationSerif-BoldItalic.ttf", EPUBTest.Properties.Resources.LiberationSerif_BoldItalic, "application/octet-stream");
+                epub.AddData("LiberationSerif-Regular.ttf", Bzway.DotNetBook.ePub.Test.Properties.Resources.LiberationSerif_Regular, "application/octet-stream");
+                epub.AddData("LiberationSerif-Bold.ttf", Bzway.DotNetBook.ePub.Test.Properties.Resources.LiberationSerif_Bold, "application/octet-stream");
+                epub.AddData("LiberationSerif-Italic.ttf", Bzway.DotNetBook.ePub.Test.Properties.Resources.LiberationSerif_Italic, "application/octet-stream");
+                epub.AddData("LiberationSerif-BoldItalic.ttf", Bzway.DotNetBook.ePub.Test.Properties.Resources.LiberationSerif_BoldItalic, "application/octet-stream");
             }
 
             epub.AddStylesheetData("style.css", css);
-            Bitmap coverImg = EPUBTest.Properties.Resources.pngSample;
+            Bitmap coverImg = Bzway.DotNetBook.ePub.Test.Properties.Resources.pngSample;
             MemoryStream coverData = new MemoryStream();
             coverImg.Save(coverData, ImageFormat.Png);
             String coverId = epub.AddImageData("cover.png", coverData.GetBuffer());
             epub.AddMetaItem("cover", coverId);
 
-            String page_template = Encoding.UTF8.GetString(EPUBTest.Properties.Resources.page);
+            String page_template = Encoding.UTF8.GetString(Bzway.DotNetBook.ePub.Test.Properties.Resources.page);
 
             int navCounter = 1;
             int pageCounter = 1;
@@ -63,16 +63,16 @@ namespace EPUBTest
             content += "<h2>Header 2</h2>";
             content += "<h3>Header 3</h3>";
             content += "<h4>Regular paragraph</h4>";
-            content += "<p>" + EPUBTest.Properties.Resources.lorem + "<a href=\"notes.xhtml#n1\">[1]</a></p>";
+            content += "<p>" + Bzway.DotNetBook.ePub.Test.Properties.Resources.lorem + "<a href=\"notes.xhtml#n1\">[1]</a></p>";
 
             content += "<h4>Bold paragraph</h4>";
-            content += "<p class=\"bold\">" + EPUBTest.Properties.Resources.lorem + "</p>";
+            content += "<p class=\"bold\">" + Bzway.DotNetBook.ePub.Test.Properties.Resources.lorem + "</p>";
 
             content += "<h4>Italic paragraph</h4>";
-            content += "<p class=\"italic\">" + EPUBTest.Properties.Resources.lorem + "</p>";
+            content += "<p class=\"italic\">" + Bzway.DotNetBook.ePub.Test.Properties.Resources.lorem + "</p>";
 
             content += "<h4>Bold+Italic paragraph</h4>";
-            content += "<p class=\"bolditalic\">" + EPUBTest.Properties.Resources.lorem + "</p>";
+            content += "<p class=\"bolditalic\">" + Bzway.DotNetBook.ePub.Test.Properties.Resources.lorem + "</p>";
 
             String page = page_template.Replace("%%CONTENT%%", content);
 
@@ -88,7 +88,7 @@ namespace EPUBTest
 
                 if (checkBoxPng.Checked)
                 {
-                    Bitmap img = EPUBTest.Properties.Resources.pngSample;
+                    Bitmap img = Bzway.DotNetBook.ePub.Test.Properties.Resources.pngSample;
                     MemoryStream memImg = new MemoryStream();
                     img.Save(memImg, ImageFormat.Png);
                     epub.AddImageData("sample.png", memImg.GetBuffer());
@@ -101,7 +101,7 @@ namespace EPUBTest
 
                 if (checkBoxJpeg.Checked)
                 {
-                    Bitmap img = EPUBTest.Properties.Resources.jpegSample;
+                    Bitmap img = Bzway.DotNetBook.ePub.Test.Properties.Resources.jpegSample;
                     MemoryStream memImg = new MemoryStream();
                     img.Save(memImg, ImageFormat.Jpeg);
                     epub.AddImageData("sample.jpg", memImg.GetBuffer());
@@ -114,7 +114,7 @@ namespace EPUBTest
 
                 if (checkBoxGif.Checked)
                 {
-                    Bitmap img = EPUBTest.Properties.Resources.gifSample;
+                    Bitmap img = Bzway.DotNetBook.ePub.Test.Properties.Resources.gifSample;
                     MemoryStream memImg = new MemoryStream();
                     img.Save(memImg, ImageFormat.Gif);
                     epub.AddImageData("sample.gif", memImg.GetBuffer());
@@ -127,7 +127,7 @@ namespace EPUBTest
 
                 if (checkBoxSvg.Checked)
                 {
-                    byte[] svg = EPUBTest.Properties.Resources.svgSample;
+                    byte[] svg = Bzway.DotNetBook.ePub.Test.Properties.Resources.svgSample;
 
                     epub.AddImageData("sample.svg", svg);
                     page = page_template.Replace("%%CONTENT%%", "<img width=\"500\" height=\"500\" src=\"sample.svg\" alt=\"\"/>");

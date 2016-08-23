@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 
 
-namespace Bzway.EPubBook.Writer
+namespace Bzway.DotNetBook.ePub
 {
     class Container
     {

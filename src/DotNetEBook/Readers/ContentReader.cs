@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using Bzway.EPubBook.Reader.Entities;
-using Bzway.EPubBook.Reader.Schema.Opf;
-using Bzway.EPubBook.Reader.Utils;
+using Bzway.DotNetBook.ePub.Entities;
+using Bzway.DotNetBook.ePub.Schema.Opf;
+using Bzway.DotNetBook.ePub.Utils;
 
-namespace Bzway.EPubBook.Reader.Readers
+namespace Bzway.DotNetBook.ePub.Readers
 {
     internal static class ContentReader
     {

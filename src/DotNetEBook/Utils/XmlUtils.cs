@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Bzway.EPubBook.Reader.Utils
+namespace Bzway.DotNetBook.ePub.Utils
 {
     internal static class XmlUtils
     {

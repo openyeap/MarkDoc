@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Bzway.EPubBook.Writer
+namespace Bzway.DotNetBook.ePub
 {
     /// <summary>
     /// Dublin Core
@@ -38,11 +38,11 @@ namespace Bzway.EPubBook.Writer
 
         internal XElement ToElement()
         {
-            XElement element = new XElement(EPubBook.DcNS + _name, _value);
+            XElement element = new XElement(EBook.DcNS + _name, _value);
             foreach (string key in _opfAttributes.Keys)
             {
                 string value = _opfAttributes[key];
-                element.SetAttributeValue(EPubBook.OpfNS + key, value);
+                element.SetAttributeValue(EBook.OpfNS + key, value);
             }
             foreach (string key in _attributes.Keys)
             {

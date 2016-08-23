@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace Bzway.EPubBook.Writer
+namespace Bzway.DotNetBook.ePub
 {
     /// <summary>
     /// Class for TOC entry. Top-level navPoints should be created by Epub.Document.AddNavPoint method
