@@ -1,6 +1,6 @@
 ﻿namespace Bzway.DotNetBook.ePub.Test
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
