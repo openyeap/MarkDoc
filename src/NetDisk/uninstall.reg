@@ -1,0 +1,17 @@
+Windows Registry Editor Version 5.00
+
+[-HKEY_CLASSES_ROOT\directory\Background\shell\NetDisk\shell\menu1\command]
+[-HKEY_CLASSES_ROOT\directory\Background\shell\NetDisk\shell\menu1]
+[-HKEY_CLASSES_ROOT\directory\Background\shell\NetDisk\shell\menu2\command]
+[-HKEY_CLASSES_ROOT\directory\Background\shell\NetDisk\shell\menu2]
+[-HKEY_CLASSES_ROOT\directory\Background\shell\NetDisk]
+[-HKEY_CLASSES_ROOT\directory\shell\NetDisk\shell\menu1\command]
+[-HKEY_CLASSES_ROOT\directory\shell\NetDisk\shell\menu1]
+[-HKEY_CLASSES_ROOT\directory\shell\NetDisk\shell\menu2\command]
+[-HKEY_CLASSES_ROOT\directory\shell\NetDisk\shell\menu2]
+[-HKEY_CLASSES_ROOT\directory\shell\NetDisk]
+[-HKEY_CLASSES_ROOT\Folder\shell\NetDisk\shell\menu1\command]
+[-HKEY_CLASSES_ROOT\Folder\shell\NetDisk\shell\menu1]
+[-HKEY_CLASSES_ROOT\Folder\shell\NetDisk\shell\menu2\command]
+[-HKEY_CLASSES_ROOT\Folder\shell\NetDisk\shell\menu2]
+[-HKEY_CLASSES_ROOT\Folder\shell\NetDisk]

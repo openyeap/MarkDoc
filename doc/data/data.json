@@ -1,0 +1,23 @@
+{
+  "navigation": {
+    "uid": "guid",
+    "title": "我的文档",
+    "auth": "Adm Zhu",
+    "child": [
+      {
+        "path": "/Folder1",
+        "name": "第一章",
+        "child": [
+          {
+            "path": "/",
+            "name": "第一节"
+          }
+        ]
+      },
+      {
+        "path": "/",
+        "name": "第二章"
+      }
+    ]
+  }
+}

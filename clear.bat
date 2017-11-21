@@ -1,15 +1,15 @@
-echo Parameter£º%1
-echo µ±Ç°ÅÌ·û£º%~d0
-echo µ±Ç°ÅÌ·ûºÍÂ·¾¶£º%~dp0
-echo µ±Ç°Åú´¦ÀíÈ«Â·¾¶£º%~f0
-echo µ±Ç°ÅÌ·ûºÍÂ·¾¶µÄ¶ÌÎÄ¼þÃû¸ñÊ½£º%~sdp0
-echo µ±Ç°CMDÄ¬ÈÏÄ¿Â¼£º%cd%
-echo Ä¿Â¼ÖÐÓÐ¿Õ¸ñÒ²¿ÉÒÔ¼ÓÈë""±ÜÃâÕÒ²»µ½Â·¾¶
-echo µ±Ç°ÅÌ·û£º"%~d0"
-echo µ±Ç°ÅÌ·ûºÍÂ·¾¶£º"%~dp0"
-echo µ±Ç°Åú´¦ÀíÈ«Â·¾¶£º"%~f0"
-echo µ±Ç°ÅÌ·ûºÍÂ·¾¶µÄ¶ÌÎÄ¼þÃû¸ñÊ½£º"%~sdp0"
-echo µ±Ç°CMDÄ¬ÈÏÄ¿Â¼£º"%cd%"
+ï»¿echo Parameterï¼š%1
+echo å½“å‰ç›˜ç¬¦ï¼š%~d0
+echo å½“å‰ç›˜ç¬¦å’Œè·¯å¾„ï¼š%~dp0
+echo å½“å‰æ‰¹å¤„ç†å…¨è·¯å¾„ï¼š%~f0
+echo å½“å‰ç›˜ç¬¦å’Œè·¯å¾„çš„çŸ­æ–‡ä»¶åæ ¼å¼ï¼š%~sdp0
+echo å½“å‰CMDé»˜è®¤ç›®å½•ï¼š%cd%
+echo ç›®å½•ä¸­æœ‰ç©ºæ ¼ä¹Ÿå¯ä»¥åŠ å…¥""é¿å…æ‰¾ä¸åˆ°è·¯å¾„
+echo å½“å‰ç›˜ç¬¦ï¼š"%~d0"
+echo å½“å‰ç›˜ç¬¦å’Œè·¯å¾„ï¼š"%~dp0"
+echo å½“å‰æ‰¹å¤„ç†å…¨è·¯å¾„ï¼š"%~f0"
+echo å½“å‰ç›˜ç¬¦å’Œè·¯å¾„çš„çŸ­æ–‡ä»¶åæ ¼å¼ï¼š"%~sdp0"
+echo å½“å‰CMDé»˜è®¤ç›®å½•ï¼š"%cd%"
 
 REM - performs a remove directory, with wildcard matching - example ; rd-wildcard 2007-*
 dir BIN /b /s >loglist.txt
@@ -27,4 +27,15 @@ for /f %%a in (./loglist.txt) do (
 )
 del /q loglist.txt
 endlocal
+
+dir project.lock.json /b /s >loglist.txt
+dir *.targets /b /s >>loglist.txt
+dir *.user /b /s >>loglist.txt
+setlocal enabledelayedexpansion
+for /f %%a in (./loglist.txt) do (
+	del /s /q %%a
+) 
+del /q loglist.txt
+endlocal
+
 rd /s /q Publish

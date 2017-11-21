@@ -1,0 +1,18 @@
+# Setting
+title: Demo
+subtitle: subtile
+description: this is a description for the site/book
+author: zhumingwu
+
+# Directory
+data_dir: data
+doc_dir: doc
+theme_dir: theme
+asset_dir: asset
+public_dir: public
+
+# Writing
+default_theme: default
+default_layout: uncategorized
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss

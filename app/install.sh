@@ -1,0 +1,1 @@
+ln -s ~/writer.dll /usr/local/bin/mdoc

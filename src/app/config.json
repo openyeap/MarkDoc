@@ -1,0 +1,11 @@
+﻿{
+
+  "commandName": "Project",
+  //"workingDirectory": "D:\\Work\\hi",
+  "commandLineArgs": "g a",
+  "launchBrowser": true,
+  "environmentVariables": {
+    "ASPNETCORE_ENVIRONMENT": "Development"
+  },
+  "applicationUrl": "http://localhost:46376"
+}
