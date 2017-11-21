@@ -22,12 +22,12 @@ namespace Bzway.Writer.App
         private Yaml()
         {
         }
-        static Yaml L = new Yaml();
-        public static Yaml Default { get { return L; } }
+        static Yaml yaml = new Yaml();
+        public static Yaml Default { get { return yaml; } }
         private Deserializer deserializer = new Deserializer();
-        public Dictionary<string, object> dictionary(string setting)
+        public Dictionary<string, object> Parse(string input)
         {
-            var yamlObject = (Dictionary<object, object>)deserializer.Deserialize(new StringReader(setting.ToString()));
+            var yamlObject = (Dictionary<object, object>)deserializer.Deserialize(new StringReader(input));
             if (yamlObject == null)
             {
                 return new Dictionary<string, object>();

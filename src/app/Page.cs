@@ -56,13 +56,8 @@ namespace Bzway.Writer.App
                 this.Source = source.ToString();
             }
 
-            var deserializer = new Deserializer();
-            var yamlObject = (Dictionary<object, object>)deserializer.Deserialize(new StringReader(setting.ToString()));
-            var dict = new Dictionary<string, object>();
-            foreach (var item in yamlObject)
-            {
-                dict.Add(item.Key.ToString(), item.Value);
-            }
+
+            var dict = Yaml.Default.Parse(setting.ToString());
             this.pageData = Hash.FromDictionary(dict);
 
             string layout = pageData.Get<string>("layout", pageData.Get<string>("default_layout", "Index"));

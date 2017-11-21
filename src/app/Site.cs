@@ -24,8 +24,6 @@ namespace Bzway.Writer.App
         private readonly string default_category;
         private readonly string date_format;
         private readonly string time_format;
-        private readonly Theme theme;
-        private readonly List<Page> pages;
         public Site(string root)
         {
             this.root = root;
@@ -37,20 +35,15 @@ namespace Bzway.Writer.App
             this.default_category = globalHash.Get<string>("default_category", "home");
             this.date_format = globalHash.Get<string>("date_format", "yyyy-MM-dd");
             this.time_format = globalHash.Get<string>("time_format", "HH:mm:ss");
-
-            var path = Path.Combine(this.root, this.themes_dir, this.default_themes);
-            this.theme = new Theme(path);
-            this.pages = this.LoadPages();
-            Template.FileSystem = new LayoutFileSystem();
         }
-        List<Page> LoadPages()
+        List<Page> LoadPages(Theme theme)
         {
             List<Page> list = new List<Page>();
             try
             {
                 foreach (var path in Directory.GetFiles(this.doc_dir, "*.*", SearchOption.AllDirectories))
                 {
-                    list.Add(new Page(Path.Combine(this.root, this.doc_dir), path, this.globalHash, this.theme));
+                    list.Add(new Page(Path.Combine(this.root, this.doc_dir), path, this.globalHash,  theme));
                 }
             }
             catch (Exception ex)
@@ -67,16 +60,10 @@ namespace Bzway.Writer.App
             {
                 return new Hash();
             }
-            var deserializer = new Deserializer();
-            var yamlObject = (Dictionary<object, object>)deserializer.Deserialize(new StreamReader(configFile));
-            var dict = new Dictionary<string, object>();
-            foreach (var item in yamlObject)
-            {
-                dict.Add(item.Key.ToString(), item.Value);
-            }
+            var dict = Yaml.Default.Parse(File.ReadAllText(configFile));
             return Hash.FromDictionary(dict);
         }
-        public void Create(string name)
+        public string Create(string name)
         {
             var path = Path.Combine(this.doc_dir, name + ".md");
             FileInfo fi = new FileInfo(path);
@@ -89,6 +76,7 @@ namespace Bzway.Writer.App
                 fi.Create();
             }
             Console.WriteLine("created new page: " + fi.FullName);
+            return fi.FullName;
         }
         public void Clean()
         {
@@ -96,14 +84,20 @@ namespace Bzway.Writer.App
         }
         public void Generate()
         {
-            foreach (var item in this.pages)
+
+            Template.FileSystem = new LayoutFileSystem();
+            var themepath = Path.Combine(this.root, this.themes_dir, this.default_themes);
+            var theme = new Theme(themepath);
+
+            foreach (var item in this.LoadPages(theme))
             {
                 item.Save(this.public_dir);
             }
-            foreach (var path in this.theme.Assets)
-            {
 
-                var destFileName = Path.Combine(this.public_dir, path.Remove(0, this.theme.Root.Length + 1));
+
+            foreach (var path in theme.Assets)
+            {
+                var destFileName = Path.Combine(this.public_dir, path.Remove(0, theme.Root.Length + 1));
                 var fi = new FileInfo(destFileName);
                 if (!fi.Directory.Exists)
                 {

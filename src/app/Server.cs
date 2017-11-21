@@ -16,23 +16,48 @@ namespace Bzway.Writer.App
 {
     public class Server
     {
-        const string processFile = "/writer.pid";
-        public string HostUrl { get; private set; }
-        public string BroswerPath { get; private set; }
-        public string ProcessFile { get; private set; }
+
+        public string HostUrl
+        {
+            get
+            {
+
+                return this.configuration.GetValue<string>("applicationUrl", "http://localhost:9999");
+            }
+        }
+        public string Broswer
+        {
+            get
+            {
+                return this.configuration.GetSection("Tools").GetValue<string>("Broswer", "iexplore.exe");
+            }
+        }
+        public string Editor
+        {
+            get
+            {
+                return this.configuration.GetSection("Tools").GetValue<string>("Editor", "notepad.exe");
+            }
+        }
+        public string ProcessFile
+        {
+            get
+            {
+                return Path.Combine(this.root, "writer.pid");
+            }
+        }
+
+        private readonly string root;
+        private readonly IConfigurationRoot configuration;
         public Server()
         {
-            var applicationPath = Assembly.GetEntryAssembly().Location;
-            var root = new FileInfo(applicationPath).DirectoryName;
-            this.ProcessFile = root + processFile;
-
+            this.root = AppDomain.CurrentDomain.BaseDirectory;
             var builder = new ConfigurationBuilder()
-                 .SetBasePath(root)
-                 .AddJsonFile("config.json", optional: false, reloadOnChange: false)
-                 .AddEnvironmentVariables();
-            var config = builder.Build();
-            this.HostUrl = config.GetValue<string>("HostUrl", "http://localhost:9999");
-            this.BroswerPath = config.GetValue<string>("BroswerPath", @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe");
+                .SetBasePath(root)
+                .AddJsonFile("config.json", optional: false, reloadOnChange: false)
+                .AddEnvironmentVariables();
+            this.configuration = builder.Build();
+
         }
     }
 }

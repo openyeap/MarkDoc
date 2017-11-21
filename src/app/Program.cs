@@ -8,6 +8,7 @@ using System.Text;
 using DotLiquid;
 using System.Diagnostics;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 
 namespace Bzway.Writer.App
 {
@@ -57,10 +58,10 @@ namespace Bzway.Writer.App
             var filePath = args.FirstOrDefault();
             if (string.IsNullOrEmpty(filePath))
             {
-                Process.Start(server.BroswerPath, server.HostUrl);
+                Process.Start(server.Broswer, server.HostUrl);
                 return;
             }
-            Process.Start(server.BroswerPath, server.HostUrl + filePath);
+            Process.Start(server.Broswer, server.HostUrl + filePath);
         }
 
         public static void Edit(string[] args)
@@ -71,21 +72,12 @@ namespace Bzway.Writer.App
             {
                 return;
             }
+
             var docPath = cmd.Trim('/', '\\');
-            if (docPath.EndsWith(".md"))
-            {
-                docPath = Path.Combine(root, docPath);
-            }
-            else
-            {
-                docPath = Path.Combine(root, docPath + ".md");
-            }
-            Console.WriteLine(docPath);
-            if (!File.Exists(docPath))
-            {
-                File.WriteAllText(docPath, "hello word");
-            }
-            Process.Start(docPath);
+            var site = new Site(root);
+            var filePath = site.Create(docPath);
+            Server server = new Server();
+            Process.Start(server.Editor, filePath);
         }
         public static void Run(string[] args)
         {
