@@ -18,7 +18,7 @@ namespace Bzway.Writer.App
         public Theme(string root)
         {
             this.Root = root;
-            this.Layout = new Dictionary<string, Layout>();
+            this.Layout = new Dictionary<string, Layout>(StringComparer.OrdinalIgnoreCase);
             this.Assets = new List<string>();
 
             if (!Directory.Exists(this.Root))
@@ -26,11 +26,11 @@ namespace Bzway.Writer.App
                 Directory.CreateDirectory(this.Root);
                 return;
             }
-            foreach (var item in Directory.GetFiles(this.Root, "*.html", SearchOption.TopDirectoryOnly))
+            foreach (var item in Directory.GetFiles(this.Root, "*.md", SearchOption.TopDirectoryOnly))
             {
                 FileInfo file = new FileInfo(item);
 
-                this.Layout.Add(file.Name, new Layout() { Source = File.ReadAllText(item) });
+                this.Layout.Add(file.Name.TrimEnd('d','m','.'), new Layout() { Source = File.ReadAllText(item) });
             }
             List<string> regList = new List<string>();
             var ignoreFile = Path.Combine(root, "ignore.txt");
@@ -79,7 +79,7 @@ namespace Bzway.Writer.App
             }).ToList();
             foreach (var item in files)
             {
-                if (item.EndsWith(".html"))
+                if (item.EndsWith(".md"))
                 {
                     continue;
                 }

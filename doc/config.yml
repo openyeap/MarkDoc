@@ -16,3 +16,11 @@ default_theme: default
 default_layout: uncategorized
 date_format: YYYY-MM-DD
 time_format: HH:mm:ss
+
+test:
+ name: adm
+ sex: 1
+ 
+ 
+tools:
+ web: chrome

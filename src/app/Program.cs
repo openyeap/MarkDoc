@@ -47,14 +47,13 @@ namespace Bzway.Writer.App
         }
         public static void Generate(string[] args)
         {
-            var root = Directory.GetCurrentDirectory();
-            Site site = new Site(root);
+            Site site = new Site();
             site.Generate();
             Console.WriteLine("generate site OK");
         }
         public static void View(string[] args)
         {
-            var server = new Server();
+            var server = new Site();
             var filePath = args.FirstOrDefault();
             if (string.IsNullOrEmpty(filePath))
             {
@@ -74,15 +73,15 @@ namespace Bzway.Writer.App
             }
 
             var docPath = cmd.Trim('/', '\\');
-            var site = new Site(root);
+            var site = new Site( );
             var filePath = site.Create(docPath);
-            Server server = new Server();
+            Site server = new Site();
             Process.Start(server.Editor, filePath);
         }
         public static void Run(string[] args)
         {
             var root = Directory.GetCurrentDirectory();
-            var server = new Server();
+            var server = new Site();
             bool canRun = !File.Exists(server.ProcessFile);
             if (!canRun)
             {
@@ -102,6 +101,7 @@ namespace Bzway.Writer.App
                 {
                     stream.Write(Process.GetCurrentProcess().Id);
                 };
+                var site = new Site( );
                 var host = new WebHostBuilder()
                     .UseKestrel()
                     .UseUrls(server.HostUrl)

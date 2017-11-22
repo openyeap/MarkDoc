@@ -14,30 +14,63 @@ using Microsoft.Extensions.FileProviders;
 using System.Text;
 using HeyRed.MarkdownSharp;
 using YamlDotNet.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Bzway.Writer.App
 {
-    public class Yaml
+    public class ConfigFileHelp
     {
-        private Yaml()
+        private ConfigFileHelp()
         {
         }
-        static Yaml yaml = new Yaml();
-        public static Yaml Default { get { return yaml; } }
+        static ConfigFileHelp yaml = new ConfigFileHelp();
+        public static ConfigFileHelp Default { get { return yaml; } }
         private Deserializer deserializer = new Deserializer();
-        public Dictionary<string, object> Parse(string input)
+        public Dictionary<string, object> ParseYaml(string input)
         {
-            var yamlObject = (Dictionary<object, object>)deserializer.Deserialize(new StringReader(input));
-            if (yamlObject == null)
+            try
+            {
+                var yamlObject = (Dictionary<object, object>)deserializer.Deserialize(new StringReader(input));
+                if (yamlObject == null)
+                {
+                    return new Dictionary<string, object>();
+                }
+                var dict = new Dictionary<string, object>();
+                foreach (var item in yamlObject)
+                {
+                    dict.Add(item.Key.ToString(), item.Value);
+                }
+                return dict;
+            }
+            catch
             {
                 return new Dictionary<string, object>();
             }
-            var dict = new Dictionary<string, object>();
-            foreach (var item in yamlObject)
+        }
+
+
+        public Dictionary<string, object> ParseJson(string input)
+        {
+            var values2 = new Dictionary<string, object>();
+            try
             {
-                dict.Add(item.Key.ToString(), item.Value);
+                var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(input);
+                foreach (KeyValuePair<string, object> d in values)
+                {
+                    if (d.Value is JObject)
+                    {
+                        values2.Add(d.Key, ParseJson(d.Value.ToString()));
+                    }
+                    else
+                    {
+                        values2.Add(d.Key, d.Value);
+                    }
+                }
+
             }
-            return dict;
+            catch { }
+            return values2;
         }
     }
 }

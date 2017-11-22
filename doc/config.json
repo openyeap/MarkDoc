@@ -1,0 +1,10 @@
+﻿{
+  "environmentVariables": {
+    "ASPNETCORE_ENVIRONMENT": "Development"
+  },
+  "applicationUrl": "http://localhost:46376",
+  "tools": {
+    "browser": "explorer",
+    "link": "http://www.baidu.com"
+  }
+}

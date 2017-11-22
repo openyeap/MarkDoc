@@ -18,42 +18,43 @@ namespace Bzway.Writer.App
 {
     public class LayoutFileSystem : IFileSystem
     {
-        public LayoutFileSystem()
+        public IList<IFileProvider> fileProviders = new List<IFileProvider>();
+        public LayoutFileSystem(params IFileProvider[] fileProviders)
         {
-
+            foreach (var item in fileProviders)
+            {
+                this.fileProviders.Add(item);
+            }
         }
         public string ReadTemplateFile(Context context, string templateName)
         {
-            var path = context[templateName].ToString();
-            var fileProvider = context.Registers.Get<IFileProvider>("page_dir");
-            var fileInfo = fileProvider.GetFileInfo(path);
-            if (fileInfo.Exists)
+            try
             {
-                int count = (int)fileInfo.Length;
-                byte[] buffer = new byte[count];
-                using (var reader = fileInfo.CreateReadStream())
+                var path = templateName;
+                if (context[templateName] != null)
                 {
-                    reader.Read(buffer, 0, count);
+                    path = context[templateName].ToString();
                 }
-                var source = Encoding.UTF8.GetString(buffer);
-                return source;
-            }
-            fileProvider = context.Registers.Get<IFileProvider>("layout_dir");
-            if (fileProvider == null)
-            {
-                return string.Empty;
-            }
-            fileInfo = fileProvider.GetFileInfo(path);
-            if (fileInfo.Exists)
-            {
-                int count = (int)fileInfo.Length;
-                byte[] buffer = new byte[count];
-                using (var reader = fileInfo.CreateReadStream())
+
+                foreach (var fileProvider in this.fileProviders)
                 {
-                    reader.Read(buffer, 0, count);
+                    var fileInfo = fileProvider.GetFileInfo(path);
+                    if (fileInfo.Exists)
+                    {
+                        int count = (int)fileInfo.Length;
+                        byte[] buffer = new byte[count];
+                        using (var reader = fileInfo.CreateReadStream())
+                        {
+                            reader.Read(buffer, 0, count);
+                        }
+                        var source = Encoding.UTF8.GetString(buffer);
+                        return source;
+                    }
                 }
-                var source = Encoding.UTF8.GetString(buffer);
-                return source;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
             return string.Empty;
         }
