@@ -1,6 +1,6 @@
----
-layout: blog
----
+﻿<!---
+layout: index
+--->
 
 
 <div>a:

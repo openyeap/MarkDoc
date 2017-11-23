@@ -74,7 +74,7 @@ namespace Bzway.Writer.App
 
             var docPath = cmd.Trim('/', '\\');
             var site = new Site( );
-            var filePath = site.Create(docPath);
+            var filePath = site.Upsert(docPath);
             Site server = new Site();
             Process.Start(server.Editor, filePath);
         }

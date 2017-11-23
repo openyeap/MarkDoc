@@ -13,18 +13,29 @@ using System.Text.RegularExpressions;
 
 namespace Bzway.Writer.App
 {
-    public class Page
+
+    public class Page : ILiquidizable
     {
         static readonly Regex regex = new Regex("<!---(?<input>[\\s\\S]*?)--->", RegexOptions.Multiline);
-        public string Source { get; set; }
-        readonly Theme theme;
-        readonly Hash pageData;
-        readonly string pagePath;
-        public Page(string root, string filePath, Hash siteData, Theme theme)
+        public string Source { get; private set; }
+
+        public string url
         {
-            this.pageData = new Hash();
-            this.theme = theme;
-            this.pagePath = filePath.Substring(root.Length + 1, filePath.Length - filePath.LastIndexOf('.')) + ".html";
+            get
+            {
+                return this.pageData.Get<string>("url");
+            }
+        }
+        public string title
+        {
+            get
+            {
+                return this.pageData.Get<string>("title", "标题");
+            }
+        }
+        readonly Hash pageData;
+        public Page(string root, string filePath)
+        {
             var input = File.ReadAllText(filePath);
             StringBuilder setting = new StringBuilder();
             foreach (Match match in regex.Matches(input))
@@ -43,22 +54,38 @@ namespace Bzway.Writer.App
 
             var dict = ConfigFileHelp.Default.ParseYaml(setting.ToString());
             this.pageData = Hash.FromDictionary(dict);
-
-            string layout = pageData.Get<string>("layout", pageData.Get<string>("default_layout", "Index"));
-
-            if (this.theme.Layout.ContainsKey(layout))
+            if (!this.pageData.ContainsKey("url"))
             {
-                this.Source = this.theme.Layout[layout].Source.Replace("{{ body }}", this.Source);
+                var url = filePath.Substring(root.Length + 1, filePath.LastIndexOf('.') - root.Length - 1) + ".html";
+                this.pageData.Add("url", url);
             }
-            var template = Template.Parse(this.Source);         
+            FileInfo fileInfo = new FileInfo(filePath);
+            if (!this.pageData.ContainsKey("CreationTime"))
+            {
+                this.pageData.Add("CreationTime", fileInfo.CreationTimeUtc);
+            }
+            if (!this.pageData.ContainsKey("DateTime"))
+            {
+                this.pageData.Add("DateTime", fileInfo.LastWriteTimeUtc);
+            }
+            if (!this.pageData.ContainsKey("Title"))
+            {
+                this.pageData.Add("Title", Path.GetFileNameWithoutExtension(filePath));
+            }
+        }
+        public void Save(string publicRoot, Hash siteData, Theme theme)
+        {
+            string layout = pageData.Get<string>("layout", pageData.Get<string>("default_layout", "Index"));
+            if (theme.Layout.ContainsKey(layout))
+            {
+                this.Source = theme.Layout[layout].Source.Replace("{{ body }}", this.Source);
+            }
+            var template = Template.Parse(this.Source);
             Hash hash = new Hash();
             hash.Add("site", siteData);
             hash.Add("page", pageData);
             this.Source = template.Render(hash);
-        }
-        public void Save(string publicRoot)
-        {
-            string path = Path.Combine(publicRoot, pagePath);
+            string path = Path.Combine(publicRoot, this.url);
             FileInfo fileInfo = new FileInfo(path);
             if (!fileInfo.Directory.Exists)
             {
@@ -69,6 +96,10 @@ namespace Bzway.Writer.App
                 var buffer = Encoding.UTF8.GetBytes(this.Source);
                 steam.Write(buffer, 0, buffer.Length);
             }
+        }
+        public object ToLiquid()
+        {
+            return Hash.FromAnonymousObject(this);
         }
     }
 }

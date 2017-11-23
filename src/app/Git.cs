@@ -246,5 +246,10 @@ namespace Bzway
         {
             throw new NotImplementedException();
         }
+
+        public void Pull(string url)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -16,7 +16,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Bzway.Writer.App
 {
-    public partial class Site
+    public partial class Site : ISite
     {
         public string HostUrl
         {
@@ -127,14 +127,14 @@ namespace Bzway.Writer.App
             }
             this.globalHash = Hash.FromDictionary(dict);
         }
-        List<Page> LoadPages(Theme theme)
+        List<Page> LoadPages()
         {
             List<Page> list = new List<Page>();
             try
             {
                 foreach (var path in Directory.GetFiles(this.doc_dir, "*.*", SearchOption.AllDirectories))
                 {
-                    list.Add(new Page(this.doc_dir, path, this.globalHash, theme));
+                    list.Add(new Page(this.doc_dir, path));
                 }
             }
             catch (Exception ex)
@@ -143,7 +143,7 @@ namespace Bzway.Writer.App
             }
             return list;
         }
-        public string Create(string name)
+        public string Upsert(string name)
         {
             var path = Path.Combine(this.doc_dir, name + ".md");
             FileInfo fi = new FileInfo(path);
@@ -167,9 +167,16 @@ namespace Bzway.Writer.App
             var themePath = Path.Combine(this.themes_dir, this.default_themes);
             Template.FileSystem = new LayoutFileSystem(new PhysicalFileProvider(this.doc_dir), new PhysicalFileProvider(themePath));
             var theme = new Theme(themePath);
-            foreach (var item in this.LoadPages(theme))
+
+            var pageList = this.LoadPages();
+            if (this.globalHash.ContainsKey("pages"))
             {
-                item.Save(this.public_dir);
+                this.globalHash.Remove("pages");
+            }
+            this.globalHash.Add("pages", pageList);
+            foreach (var item in pageList)
+            {
+                item.Save(this.public_dir, this.globalHash, theme);
             }
             foreach (var path in theme.Assets)
             {
