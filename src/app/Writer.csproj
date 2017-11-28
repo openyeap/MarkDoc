@@ -16,6 +16,9 @@
     <PackageReference Include="YamlDotNet" Version="4.2.2" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Command\CommandLine.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

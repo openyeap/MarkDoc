@@ -26,6 +26,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "doc", "doc\", "{80C2922A-23
 		SlnRelativePath = "doc\"
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine", "src\Command\CommandLine.csproj", "{FE434414-E77C-4842-BCCF-AEEC39C3E5CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{80C2922A-230C-4797-85B2-6F964949DA75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80C2922A-230C-4797-85B2-6F964949DA75}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{80C2922A-230C-4797-85B2-6F964949DA75}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{FE434414-E77C-4842-BCCF-AEEC39C3E5CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE434414-E77C-4842-BCCF-AEEC39C3E5CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE434414-E77C-4842-BCCF-AEEC39C3E5CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE434414-E77C-4842-BCCF-AEEC39C3E5CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

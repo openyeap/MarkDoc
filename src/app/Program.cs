@@ -9,41 +9,81 @@ using DotLiquid;
 using System.Diagnostics;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using CommandLine;
+using CommandLine.Text;
 
 namespace Bzway.Writer.App
 {
-    public class Program
+    public class EditOptions
     {
-        static Dictionary<string, Action<string[]>> dictionary = new Dictionary<string, Action<string[]>>(StringComparer.OrdinalIgnoreCase);
-        public static void Main(string[] args)
+        [Option('p', "path", MetaValue = "Path", Required = false, HelpText = "输入文件的相对路径")]
+        public string Path { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
         {
-            //预览文章
-            dictionary.Add("view", View);
-            dictionary.Add("v", View);
+            return HelpText.AutoBuild(this, "mdoc edit").ToString();
+        }
 
-            //发布文档
-            dictionary.Add("public", Generate);
-            dictionary.Add("p", Generate);
+    }
 
-            //输出文档
-            dictionary.Add("generate", Generate);
-            dictionary.Add("g", Generate);
+    public class EditCommand : ICommand
+    {
+        public string Name => "edit";
 
-            //创建或编辑一篇文章
-            dictionary.Add("edit", Edit);
+        public object Options { get { return this.options; } }
 
-            //启动服务
-            dictionary.Add("run", Run);
-            dictionary.Add("r", Run);
+        private EditOptions options = new EditOptions();
 
+        public void Execute(IEnumerable<string> args)
+        {
+            var root = Directory.GetCurrentDirectory();
             var cmd = args.FirstOrDefault();
-
-            if (string.IsNullOrEmpty(cmd) || !dictionary.ContainsKey(cmd))
+            if (string.IsNullOrEmpty(cmd))
             {
-                Run(args);
                 return;
             }
-            dictionary[cmd].Invoke(args.Skip(1).ToArray());
+
+            var docPath = cmd.Trim('/', '\\');
+            var site = new Site();
+            var filePath = site.Upsert(docPath);
+            Site server = new Site();
+            Process.Start(server.Editor, filePath);
+        }
+    }
+    public class Program
+    {
+        static Dictionary<string, ICommand> dictionary;
+
+        static IDictionary<string, ICommand> GetCommands
+        {
+            get
+            {
+                if (dictionary == null)
+                {
+                    dictionary = new Dictionary<string, ICommand>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var item in Assembly.GetExecutingAssembly().GetTypes().Where(m => m.IsAssignableFrom(typeof(ICommand))))
+                    {
+                        var cmd = (ICommand)Activator.CreateInstance(item);
+                        if (cmd != null)
+                        {
+                            dictionary.Add(cmd.Name, cmd);
+                        }
+                    }
+                }
+                return dictionary;
+            }
+        }
+
+        public static void Main(string[] args)
+        {
+            var cmd = dictionary[args.FirstOrDefault()]; 
+
+            if (Parser.Default.ParseArguments(args.Skip(1).ToArray(), cmd.Options))
+            {
+                cmd.Execute(args);
+            }
+
         }
         public static void Generate(string[] args)
         {
@@ -73,7 +113,7 @@ namespace Bzway.Writer.App
             }
 
             var docPath = cmd.Trim('/', '\\');
-            var site = new Site( );
+            var site = new Site();
             var filePath = site.Upsert(docPath);
             Site server = new Site();
             Process.Start(server.Editor, filePath);
@@ -101,7 +141,7 @@ namespace Bzway.Writer.App
                 {
                     stream.Write(Process.GetCurrentProcess().Id);
                 };
-                var site = new Site( );
+                var site = new Site();
                 var host = new WebHostBuilder()
                     .UseKestrel()
                     .UseUrls(server.HostUrl)
