@@ -37,17 +37,39 @@ namespace Bzway.Writer.App
                 app.UseDeveloperExceptionPage();
             }
             var root = env.ContentRootPath;
-            root += "\\doc";
             app.Run(async (context) =>
             {
-                var path = context.Request.Path.Value;
-                if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(path.Split('/').LastOrDefault()))
+                try
                 {
-                    path += "index";
+                    var path = context.Request.Path.Value;
+                    if (string.IsNullOrEmpty(path) || path.EndsWith('/'))
+                    {
+                        path += "index";
+                    }
+                    path = path.Trim('/') + ".html";
+                    Site site = context.RequestServices.GetService<Site>();
+                    var result = site.View(path);
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        await context.Response.WriteAsync(result);
+                    }
+                    else
+                    {
+                        PhysicalFileProvider physicalFile = new PhysicalFileProvider(root);
+                        var file = physicalFile.GetFileInfo(context.Request.Path.Value);
+                        using (var stream = file.CreateReadStream())
+                        {
+                            byte[] buffer = new byte[stream.Length];
+                            stream.Read(buffer, 0, buffer.Length);
+                            result = Encoding.UTF8.GetString(buffer);
+                        }
+                        await context.Response.WriteAsync(result);
+                    }
                 }
-                var view = new LiquidViewResult(root, path);
-                var result = view.Render().Result;
-                await context.Response.WriteAsync(result);
+                catch (Exception ex)
+                {
+                    await context.Response.WriteAsync(ex.Message);
+                }
             });
         }
     }

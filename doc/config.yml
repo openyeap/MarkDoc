@@ -3,7 +3,7 @@ title: Demo
 subtitle: subtile
 description: this is a description for the site/book
 author: zhumingwu
-baseurl: 'D:/Work/MarkDoc/doc/public'
+baseurl:  
 
 # Directory
 data_dir: data

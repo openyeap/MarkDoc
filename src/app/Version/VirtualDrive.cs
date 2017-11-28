@@ -6,7 +6,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.IO.Compression;
 using System.Linq;
-namespace Bzway
+
+namespace Bzway.Writer.App
 {
     /// <summary>
     /// Creation and deletion of non-persistent virtual drives.

@@ -8,7 +8,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 
-namespace Bzway
+namespace Bzway.Writer.App
 {
 
     public class Git : IGit

@@ -1,4 +1,4 @@
-﻿namespace Bzway
+﻿namespace Bzway.Writer.App
 {
     public interface IGit
     {

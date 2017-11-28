@@ -61,7 +61,7 @@ namespace Bzway.Writer.App
                 return Path.Combine(this.DocDirectory, globalHash.Get<string>("doc_dir", "doc"));
             }
         }
-        private string public_dir
+        public string Public
         {
             get
             {
@@ -153,14 +153,14 @@ namespace Bzway.Writer.App
             }
             if (!fi.Exists)
             {
-                fi.Create();
+                File.WriteAllText(fi.FullName, "Hello World", Encoding.UTF8);
             }
             Console.WriteLine("created new page: " + fi.FullName);
             return fi.FullName;
         }
         public void Clean()
         {
-            Directory.Delete(this.public_dir, true);
+            Directory.Delete(this.Public, true);
         }
         public void Generate()
         {
@@ -176,11 +176,11 @@ namespace Bzway.Writer.App
             this.globalHash.Add("pages", pageList);
             foreach (var item in pageList)
             {
-                item.Save(this.public_dir, this.globalHash, theme);
+                item.Save(this.Public, this.globalHash, theme);
             }
             foreach (var path in theme.Assets)
             {
-                var destFileName = Path.Combine(this.public_dir, path.Remove(0, theme.Root.Length + 1));
+                var destFileName = Path.Combine(this.Public, path.Remove(0, theme.Root.Length + 1));
                 var fi = new FileInfo(destFileName);
                 if (!fi.Directory.Exists)
                 {
@@ -188,6 +188,40 @@ namespace Bzway.Writer.App
                 }
                 File.Copy(path, destFileName, true);
             }
+        }
+        public string View(string url)
+        {
+            var returnValue = string.Empty;
+            var themePath = Path.Combine(this.themes_dir, this.default_themes);
+            Template.FileSystem = new LayoutFileSystem(new PhysicalFileProvider(this.doc_dir), new PhysicalFileProvider(themePath));
+            var theme = new Theme(themePath);
+
+            var pageList = this.LoadPages();
+            if (this.globalHash.ContainsKey("pages"))
+            {
+                this.globalHash.Remove("pages");
+            }
+            this.globalHash.Add("pages", pageList);
+            foreach (var item in pageList)
+            {
+
+                item.Save(this.Public, this.globalHash, theme);
+                if (item.url == url)
+                {
+                    returnValue = item.Source;
+                }
+            }
+            foreach (var path in theme.Assets)
+            {
+                var destFileName = Path.Combine(this.Public, path.Remove(0, theme.Root.Length + 1));
+                var fi = new FileInfo(destFileName);
+                if (!fi.Directory.Exists)
+                {
+                    fi.Directory.Create();
+                }
+                File.Copy(path, destFileName, true);
+            }
+            return returnValue;
         }
     }
 }
