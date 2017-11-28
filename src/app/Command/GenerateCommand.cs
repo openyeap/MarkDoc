@@ -9,7 +9,7 @@ namespace Bzway.Writer.App
 {
     public class GenerateCommand : ICommand
     {
-        public string Name => "Generate";
+        public string Name => "g|Generate";
         public void Execute(IEnumerable<string> args)
         {
             CommandOptions editOptions = new CommandOptions(string.Join(" ", args.ToArray()));

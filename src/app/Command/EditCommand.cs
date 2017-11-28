@@ -22,7 +22,6 @@ namespace Bzway.Writer.App
             var docPath = editOptions.Path.Trim('/', '\\');
             var site = new Site();
             var filePath = site.Upsert(docPath);
-
             Process.Start(site.Editor, filePath);
         }
     }

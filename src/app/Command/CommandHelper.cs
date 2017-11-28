@@ -19,7 +19,10 @@ namespace Bzway.Writer.App
                     var cmd = (ICommand)Activator.CreateInstance(item);
                     if (cmd != null)
                     {
-                        cmds.Add(cmd.Name, cmd);
+                        foreach (var name in cmd.Name.Split('|'))
+                        {
+                            cmds.Add(name, cmd);
+                        }
                     }
                 }
             }

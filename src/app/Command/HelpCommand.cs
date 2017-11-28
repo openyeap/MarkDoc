@@ -23,6 +23,9 @@ mdoc command [options]
 Command: Edit
   -p, --path VALUE           The path of file to create or modify
 
+Command: g|generate
+  -p, --path VALUE           The path of file to generate
+
 Command: Setting
   -t, --theme VALUE         The theme which to be used on the site
 
