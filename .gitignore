@@ -29,7 +29,7 @@ obj/
 [Dd]ebug*/
 [Rr]elease*/
 Ankh.NoLoad
-
+/doc/public
 #Tooling
 _ReSharper*/
 *.resharper
@@ -44,4 +44,4 @@ _ReSharper*/
 # Office Temp Files
 ~$*
 /.vs
-/doc/public
+
