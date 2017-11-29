@@ -56,8 +56,16 @@ namespace Bzway.Writer.App
             this.pageData = Hash.FromDictionary(dict);
             if (!this.pageData.ContainsKey("url"))
             {
-                var url = filePath.Substring(root.Length + 1, filePath.LastIndexOf('.') - root.Length - 1) + ".html";
-                this.pageData.Add("url", url);
+                if (filePath.EndsWith(".xml"))
+                {
+                    var url = filePath.Substring(root.Length + 1);
+                    this.pageData.Add("url", url);
+                }
+                else
+                {
+                    var url = filePath.Substring(root.Length + 1, filePath.LastIndexOf('.') - root.Length - 1) + ".html";
+                    this.pageData.Add("url", url);
+                }
             }
             FileInfo fileInfo = new FileInfo(filePath);
             if (!this.pageData.ContainsKey("CreationTime"))
@@ -73,17 +81,18 @@ namespace Bzway.Writer.App
                 this.pageData.Add("Title", Path.GetFileNameWithoutExtension(filePath));
             }
         }
-        public void Save(string publicRoot, Hash siteData, Theme theme)
+        public void Save(string publicRoot, Hash siteData, Hash data, Theme theme)
         {
-            string layout = pageData.Get<string>("layout", pageData.Get<string>("default_layout", "Index"));
+            string layout = pageData.Get<string>("layout", pageData.Get<string>("default_layout", "default"));
             if (theme.Layout.ContainsKey(layout))
             {
-                this.Source = theme.Layout[layout].Source.Replace("{{ body }}", this.Source);
+                this.Source = theme.Layout[layout].Source.Replace("{{ content }}", this.Source);
             }
             var template = Template.Parse(this.Source);
             Hash hash = new Hash();
             hash.Add("site", siteData);
             hash.Add("page", pageData);
+            hash.Add("data", data);
             this.Source = template.Render(hash);
             string path = Path.Combine(publicRoot, this.url);
             FileInfo fileInfo = new FileInfo(path);

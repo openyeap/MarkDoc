@@ -49,37 +49,44 @@ namespace Bzway.Writer.App
 
         public readonly IConfigurationRoot configuration;
 
-        private readonly string DocDirectory;
+        private readonly string workDirectory;
 
         private readonly string AppDirectory;
 
-        private readonly Hash globalHash;
-        private string doc_dir
+        private readonly Hash siteData;
+        private string PostDirectory
         {
             get
             {
-                return Path.Combine(this.DocDirectory, globalHash.Get<string>("doc_dir", "doc"));
+                return Path.Combine(this.workDirectory, siteData.Get<string>("post_dir", "post"));
             }
         }
-        public string Public
+        public string PublicDirectory
         {
             get
             {
-                return Path.Combine(this.DocDirectory, globalHash.Get<string>("public_dir", "public"));
+                return Path.Combine(this.workDirectory, siteData.Get<string>("public_dir", "public"));
             }
         }
-        private string themes_dir
+        private string ThemesDirectory
         {
             get
             {
-                return Path.Combine(this.DocDirectory, globalHash.Get<string>("themes_dir", "themes"));
+                return Path.Combine(this.workDirectory, siteData.Get<string>("themes_dir", "themes"));
             }
         }
-        private string default_themes
+        private string DataDirectory
         {
             get
             {
-                return this.globalHash.Get<string>("default_themes", "default");
+                return Path.Combine(this.workDirectory, siteData.Get<string>("data_dir", "data"));
+            }
+        }
+        private string DefaultTheme
+        {
+            get
+            {
+                return this.siteData.Get<string>("default_theme", "default");
             }
         }
 
@@ -92,9 +99,9 @@ namespace Bzway.Writer.App
                 .AddEnvironmentVariables();
             this.configuration = builder.Build();
 
-            this.DocDirectory = Directory.GetCurrentDirectory();
+            this.workDirectory = Directory.GetCurrentDirectory();
 
-            var configFile = Path.Combine(this.DocDirectory, "config.yml");
+            var configFile = Path.Combine(this.workDirectory, "config.yml");
             Dictionary<string, object> dict = new Dictionary<string, object>();
             if (File.Exists(configFile))
             {
@@ -110,7 +117,7 @@ namespace Bzway.Writer.App
                     }
                 }
             }
-            configFile = Path.Combine(this.DocDirectory, "config.json");
+            configFile = Path.Combine(this.workDirectory, "config.json");
             if (File.Exists(configFile))
             {
                 foreach (var item in ConfigFileHelp.Default.ParseJson(File.ReadAllText(configFile)))
@@ -125,16 +132,24 @@ namespace Bzway.Writer.App
                     }
                 }
             }
-            this.globalHash = Hash.FromDictionary(dict);
+            this.siteData = Hash.FromDictionary(dict);
         }
         List<Page> LoadPages()
         {
             List<Page> list = new List<Page>();
             try
             {
-                foreach (var path in Directory.GetFiles(this.doc_dir, "*.*", SearchOption.AllDirectories))
+                foreach (var path in Directory.GetFiles(this.workDirectory, "*.*", SearchOption.TopDirectoryOnly))
                 {
-                    list.Add(new Page(this.doc_dir, path));
+                    if (path.EndsWith(".json") || path.EndsWith(".yaml"))
+                    {
+                        continue;
+                    }
+                    list.Add(new Page(this.workDirectory, path));
+                }
+                foreach (var path in Directory.GetFiles(this.PostDirectory, "*.*", SearchOption.AllDirectories))
+                {
+                    list.Add(new Page(this.PostDirectory, path));
                 }
             }
             catch (Exception ex)
@@ -145,7 +160,7 @@ namespace Bzway.Writer.App
         }
         public string Upsert(string name)
         {
-            var path = Path.Combine(this.doc_dir, name + ".md");
+            var path = Path.Combine(this.PostDirectory, name + ".md");
             FileInfo fi = new FileInfo(path);
             if (!fi.Directory.Exists)
             {
@@ -160,27 +175,19 @@ namespace Bzway.Writer.App
         }
         public void Clean()
         {
-            Directory.Delete(this.Public, true);
+            Directory.Delete(this.PublicDirectory, true);
         }
         public void Generate()
         {
-            var themePath = Path.Combine(this.themes_dir, this.default_themes);
-            Template.FileSystem = new LayoutFileSystem(new PhysicalFileProvider(this.doc_dir), new PhysicalFileProvider(themePath));
-            var theme = new Theme(themePath);
+            var themePath = Path.Combine(this.ThemesDirectory, this.DefaultTheme);
 
-            var pageList = this.LoadPages();
-            if (this.globalHash.ContainsKey("pages"))
-            {
-                this.globalHash.Remove("pages");
-            }
-            this.globalHash.Add("pages", pageList);
-            foreach (var item in pageList)
-            {
-                item.Save(this.Public, this.globalHash, theme);
-            }
+            Template.FileSystem = new LayoutFileSystem(new PhysicalFileProvider(this.PostDirectory), new PhysicalFileProvider(themePath));
+            Template.RegisterTag<IncrementTag>("increment");
+
+            var theme = new Theme(themePath);
             foreach (var path in theme.Assets)
             {
-                var destFileName = Path.Combine(this.Public, path.Remove(0, theme.Root.Length + 1));
+                var destFileName = Path.Combine(this.PublicDirectory, path.Remove(0, theme.Root.Length + 1));
                 var fi = new FileInfo(destFileName);
                 if (!fi.Directory.Exists)
                 {
@@ -188,40 +195,125 @@ namespace Bzway.Writer.App
                 }
                 File.Copy(path, destFileName, true);
             }
+
+            var pageList = this.LoadPages();
+            if (this.siteData.ContainsKey("pages"))
+            {
+                this.siteData.Remove("pages");
+            }
+            this.siteData.Add("pages", pageList);
+
+            Hash data = new Hash();
+            Dictionary<string, object> dict;
+            foreach (var path in Directory.GetFiles(this.DataDirectory, "*.*", SearchOption.TopDirectoryOnly))
+            {
+                FileInfo fileInfo = new FileInfo(path);
+                var key = fileInfo.Name.Substring(0, fileInfo.Name.LastIndexOf('.'));
+                switch (fileInfo.Extension)
+                {
+                    case ".json":
+                        dict = new Dictionary<string, object>();
+                        foreach (var item in ConfigFileHelp.Default.ParseJson(File.ReadAllText(path)))
+                        {
+                            if (dict.ContainsKey(item.Key))
+                            {
+                                dict[item.Key] = item.Value;
+                            }
+                            else
+                            {
+                                dict.Add(item.Key, item.Value);
+                            }
+                        }
+                        data.Add(key, Hash.FromDictionary(dict));
+                        break;
+                    case ".yaml":
+                        dict = new Dictionary<string, object>();
+                        foreach (var item in ConfigFileHelp.Default.ParseYaml(File.ReadAllText(path)))
+                        {
+                            if (dict.ContainsKey(item.Key))
+                            {
+                                dict[item.Key] = item.Value;
+                            }
+                            else
+                            {
+                                dict.Add(item.Key, item.Value);
+                            }
+                        }
+                        data.Add(key, Hash.FromDictionary(dict));
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            data.Remove("menu");
+            data.Add("menu", JsonConvert.DeserializeObject<List<menu>>(File.ReadAllText(this.DataDirectory + "/menu.json")));
+            foreach (var item in pageList)
+            {
+                item.Save(this.PublicDirectory, this.siteData, data, theme);
+            }
+
         }
         public string View(string url)
         {
             var returnValue = string.Empty;
-            var themePath = Path.Combine(this.themes_dir, this.default_themes);
-            Template.FileSystem = new LayoutFileSystem(new PhysicalFileProvider(this.doc_dir), new PhysicalFileProvider(themePath));
+            var themePath = Path.Combine(this.ThemesDirectory, this.DefaultTheme);
+            Template.FileSystem = new LayoutFileSystem(new PhysicalFileProvider(this.PostDirectory), new PhysicalFileProvider(themePath));
             var theme = new Theme(themePath);
 
             var pageList = this.LoadPages();
-            if (this.globalHash.ContainsKey("pages"))
+            if (this.siteData.ContainsKey("pages"))
             {
-                this.globalHash.Remove("pages");
+                this.siteData.Remove("pages");
             }
-            this.globalHash.Add("pages", pageList);
+            this.siteData.Add("pages", pageList);
+
+            foreach (var path in theme.Assets)
+            {
+                var destFileName = Path.Combine(this.PublicDirectory, path.Remove(0, theme.Root.Length + 1));
+                var fi = new FileInfo(destFileName);
+                if (!fi.Directory.Exists)
+                {
+                    fi.Directory.Create();
+                }
+                File.Copy(path, destFileName, true);
+            }
+            Hash data = new Hash();
+            foreach (var item in Directory.GetFiles(this.DataDirectory, "*.*", SearchOption.TopDirectoryOnly))
+            {
+                FileInfo fileInfo = new FileInfo(item);
+                var key = fileInfo.Name.Substring(0, fileInfo.Name.LastIndexOf('.'));
+                switch (fileInfo.Extension)
+                {
+                    case ".json":
+                        data.Add(key, ConfigFileHelp.Default.ParseJson(File.ReadAllText(item)));
+                        break;
+                    case ".yaml":
+                        data.Add(key, ConfigFileHelp.Default.ParseYaml(File.ReadAllText(item)));
+                        break;
+                    default:
+                        break;
+                }
+            }
             foreach (var item in pageList)
             {
 
-                item.Save(this.Public, this.globalHash, theme);
+                item.Save(this.PublicDirectory, this.siteData, data, theme);
                 if (item.url == url)
                 {
                     returnValue = item.Source;
                 }
             }
-            foreach (var path in theme.Assets)
-            {
-                var destFileName = Path.Combine(this.Public, path.Remove(0, theme.Root.Length + 1));
-                var fi = new FileInfo(destFileName);
-                if (!fi.Directory.Exists)
-                {
-                    fi.Directory.Create();
-                }
-                File.Copy(path, destFileName, true);
-            }
             return returnValue;
         }
+    }
+
+
+    public class menu  : DotLiquid.Drop
+    {
+        public string name { get; set; }
+
+        public string url { get; set; }
+        public string target { get; set; }
     }
 }

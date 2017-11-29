@@ -1,0 +1,8 @@
+﻿<ul class="nav navbar-nav">
+    {% for menu in data.menu %}
+    <li>{{menu}}</li>
+    <li><a href='{{menu.url}}' target="{{menu.target | default:"_self"}}">{{menu.name}}</a></li>
+    {% endfor %}
+</ul>
+
+

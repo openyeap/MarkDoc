@@ -12,10 +12,32 @@ using DotLiquid;
 using DotLiquid.FileSystems;
 using Microsoft.Extensions.FileProviders;
 using System.Text;
-using HeyRed.MarkdownSharp; 
+using HeyRed.MarkdownSharp;
 
 namespace Bzway.Writer.App
-{ 
+{
+
+
+    public class IncrementTag : Tag
+    {
+        public string markup { get; set; }
+
+        public override void Initialize(string tagName, string markup, List<string> tokens)
+        {
+            base.Initialize(tagName, markup, tokens);
+
+            this.markup = markup;
+        }
+
+        public override void Render(Context context, TextWriter result)
+        {
+            var counter = context[markup];
+            
+            context[markup] = counter;
+        }
+    }
+
+
     public class LiquidViewResult
     {
         private static Dictionary<int, Template> cache = new Dictionary<int, Template>();

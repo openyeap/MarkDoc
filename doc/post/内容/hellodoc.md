@@ -1,6 +1,7 @@
 ﻿<!---
-layout: index
+layout: default
 --->
+
 
 1、
 这是一只在 2016 年涨破天的股票。

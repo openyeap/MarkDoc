@@ -18,8 +18,7 @@ namespace Bzway.Writer.App
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(string.Join(';', args));
-            WorkStation.Register();
+            //WorkStation.Register();
             var key = args.FirstOrDefault();
             if (string.IsNullOrEmpty(key))
             {

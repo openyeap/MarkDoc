@@ -44,7 +44,7 @@ namespace Bzway.Writer.App
                     var path = context.Request.Path.Value;
                     if (string.IsNullOrEmpty(path) || path.EndsWith('/'))
                     {
-                        path += "index";
+                        path += "default";
                     }
                     path = path.Trim('/') + ".html";
                     Site site = context.RequestServices.GetService<Site>();

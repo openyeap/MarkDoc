@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Your ASP.NET application</title>
+    <link href="jqtree.css" rel="stylesheet" />
+    <script src="Scripts/jquery-3.1.1.min.js"></script>
+    <script src="Scripts/jquery.cookie.js"></script>
+    <script src="tree.jquery.js"></script>
+</head>
+<body>
+    <div id="tree1"></div>
+    <script>
+        var test;
+
+        var data = [
+    {
+        name: 'node1', id: 1,
+        children: [
+            { name: 'child1', id: 2 },
+            { name: 'child2', id: 3 }
+        ]
+    },
+    {
+        name: 'node2', id: 4,
+        children: [
+            { name: 'child3', id: 5 }
+        ]
+    }
+        ];
+
+        $(function () {
+
+            var $tree = $('#tree1');
+            $tree.tree({
+                data: data,
+                dragAndDrop: true,
+                autoOpen: 0,
+                onCreateLi: function (node, $li) {
+                    $li.find('.jqtree-element').attr('data-json', JSON.stringify(node.id));
+                }
+            });
+
+            $tree.on('click', '.edit', function (e) {
+                // Get the id from the 'node-id' data property
+                var node_id = $(e.target).data('node-id');
+
+                // Get the node from the tree
+                var node = $tree.tree('getNodeById', node_id);
+
+                if (node) {
+                    // Display the node name
+                    alert(node.name);
+                }
+            }
+       );
+        });
+    </script>
+</body>
+</html>

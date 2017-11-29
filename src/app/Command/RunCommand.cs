@@ -39,7 +39,7 @@ namespace Bzway.Writer.App
                 var host = new WebHostBuilder()
                     .UseKestrel()
                     .UseUrls(server.HostUrl)
-                    .UseContentRoot(site.Public)
+                    .UseContentRoot(site.PublicDirectory)
                     .UseIISIntegration()
                     .UseStartup<Startup>()
                     .ConfigureServices(services =>

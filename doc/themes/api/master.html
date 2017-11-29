@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{% if page.title %} 朱明武的{{ page.title }} {% endif %}</title>
+    <meta name="generator" content="zhumingwu.cn" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">博客</a>
+            </div>
+            <nav class="collapse navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li><a href='/'>主页</a></li>
+                    <li><a href='/blog.html'>博客</a></li>
+                    <li><a href='/liquid.html'>技术</a></li>
+                    <li><a href='/about.html'>关于</a></li>
+                <li><a href='http://weibo.com/u/6084365263' target='_blank' rel='me'>微博</a></li>
+                </ul>
+            </nav>
+        </div>
+    </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1>投资菜地</h1>
+                </div>
+                <div class="col-md-5">
+                    <p class="lead">屋后的一亩三分绿色菜园地</p>
+                </div>
+            </div>
+        </div><!--/container-->
+    <!--main-->
+    <div class="container">
+        <div class="row">
+            <!--right-->
+            <div class="col-md-9">
+                {{ content }}
+            </div>
+            <!--/right-->
+            <!--left-->
+            <div class="col-md-3">
+                <div class='home_box' id='home_right'>
+                    <h2>开源项目<span class="more">(<a href='https://github.com/bzway'>更多</a>)</span></h2>
+                    <div id='github-projects'>
+                    </div>
+                </div>
+            </div>
+            <!--/left-->
+        </div>
+        <!--/row-->
+    </div><!--/container-->
+    <!-- script references -->
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+</html>

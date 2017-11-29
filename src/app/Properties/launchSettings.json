@@ -17,7 +17,7 @@
     },
     "Writer": {
       "commandName": "Project",
-      "commandLineArgs": "run",
+      "commandLineArgs": "g",
       "workingDirectory": "D:\\Work\\MarkDoc\\doc",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

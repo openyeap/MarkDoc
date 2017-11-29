@@ -16,6 +16,7 @@ using HeyRed.MarkdownSharp;
 using YamlDotNet.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using YamlDotNet.RepresentationModel;
 
 namespace Bzway.Writer.App
 {
@@ -27,29 +28,90 @@ namespace Bzway.Writer.App
         static ConfigFileHelp yaml = new ConfigFileHelp();
         public static ConfigFileHelp Default { get { return yaml; } }
         private Deserializer deserializer = new Deserializer();
-        public Dictionary<string, object> ParseYaml(string input)
+        public Dictionary<string, object> ParseYaml(string text)
         {
-            try
+            var results = new Dictionary<string, object>();
+
+            var input = new StringReader(text);
+
+            var yaml = new YamlStream();
+            yaml.Load(input);
+
+            if (yaml.Documents.Count == 0)
             {
-                var yamlObject = (Dictionary<object, object>)deserializer.Deserialize(new StringReader(input));
-                if (yamlObject == null)
-                {
-                    return new Dictionary<string, object>();
-                }
-                var dict = new Dictionary<string, object>();
-                foreach (var item in yamlObject)
-                {
-                    dict.Add(item.Key.ToString(), item.Value);
-                }
-                return dict;
+                return results;
             }
-            catch
+
+            var root = yaml.Documents[0].RootNode;
+
+            var collection = root as YamlMappingNode;
+            if (collection != null)
             {
-                return new Dictionary<string, object>();
+                foreach (var entry in collection.Children)
+                {
+                    var node = entry.Key as YamlScalarNode;
+                    if (node != null)
+                    {
+                        results.Add(node.Value, GetValue(entry.Value));
+                    }
+                }
             }
+            return results;
         }
 
+        private static object GetValue(YamlNode value)
+        {
+            var collection = value as YamlMappingNode;
+            if (collection != null)
+            {
+                var results = new Dictionary<string, object>();
+                foreach (var entry in collection.Children)
+                {
+                    var node = entry.Key as YamlScalarNode;
+                    if (node != null)
+                    {
+                        results.Add(node.Value, GetValue(entry.Value));
+                    }
+                }
 
+                return results;
+            }
+
+            var list = value as YamlSequenceNode;
+            if (list != null)
+            {
+                if (list.Children.All(_ => _ is YamlScalarNode))
+                {
+                    var listString = new List<string>();
+                    foreach (var entry in list.Children)
+                    {
+                        var node = entry as YamlScalarNode;
+                        if (node != null)
+                        {
+                            listString.Add(node.Value);
+                        }
+                    }
+                    return listString;
+                }
+                else
+                {
+                    var listResults = new List<object>();
+                    foreach (var entry in list.Children)
+                    {
+                        listResults.Add(GetValue(entry));
+                    }
+                    return listResults;
+                }
+            }
+
+            bool valueBool;
+            if (bool.TryParse(value.ToString(), out valueBool))
+            {
+                return valueBool;
+            }
+
+            return value.ToString();
+        }
         public Dictionary<string, object> ParseJson(string input)
         {
             var values2 = new Dictionary<string, object>();

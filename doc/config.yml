@@ -3,18 +3,18 @@ title: Demo
 subtitle: subtile
 description: this is a description for the site/book
 author: zhumingwu
-baseurl:  
+baseurl: file:///D:/Work/MarkDoc/doc/public
 
 # Directory
 data_dir: data
-doc_dir: doc
+post_dir: post
 theme_dir: theme
 asset_dir: asset
 public_dir: public
 
 # Writing
-default_theme: default
-default_layout: uncategorized
+default_theme: api
+default_layout: default
 date_format: YYYY-MM-DD
 time_format: HH:mm:ss
 

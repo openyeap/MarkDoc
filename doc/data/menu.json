@@ -1,0 +1,23 @@
+﻿[
+  {
+    "name": "主页",
+    "url": "/"
+  },
+  {
+    "name": "简介",
+    "url": "/简介/default.html"
+  },
+  {
+    "name": "技术",
+    "url": "/"
+  },
+  {
+    "name": "内容",
+    "url": "/内容/default.html"
+  },
+  {
+    "name": "微博",
+    "url": "http://www.weibo.com",
+    "target": "_blank"
+  }
+]

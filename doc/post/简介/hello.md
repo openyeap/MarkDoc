@@ -1,6 +1,7 @@
 ﻿<!---
-layout: index
+layout: default
 --->
+
 
 
 <div>a:
