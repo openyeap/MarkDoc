@@ -11,6 +11,7 @@ namespace Bzway.Writer.App
     public class ViewCommand : ICommand
     {
         public string Name => "View";
+        public string Usage => string.Empty;
         public void Execute(IEnumerable<string> args)
         {
             var server = new Site();

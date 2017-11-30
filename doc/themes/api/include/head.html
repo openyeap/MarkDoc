@@ -4,10 +4,8 @@
 <!--<meta name="viewport" content="width=device-width, initial-scale=1" />-->
 
 <title>
-    {% if page.title %} {{ page.title }} {% endif %}
-    {% if site.title %} {{ site.title }} {% endif %}
+    {% if page.title %}{{ page.title }}{% endif %}{% if site.title %}{{ site.title| prepend: "-" }}{% endif %}
 </title>
-
 <meta name="description" content="{{ page.description | default: site.description }}">
 <meta name="author" content="{{ page.author | default: site.author }}">
 <link href="{{ '/css/bootstrap.min.css' | prepend: site.baseurl }}" rel="stylesheet" />

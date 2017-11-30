@@ -7,5 +7,7 @@ namespace Bzway.Writer.App
     {
         string Name { get; }
         void Execute(IEnumerable<string> args);
+
+        string Usage { get; }
     }
 }

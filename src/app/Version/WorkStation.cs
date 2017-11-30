@@ -20,13 +20,13 @@ namespace Bzway.Writer.App
             try
             {
                 var path = Environment.GetEnvironmentVariable("Path");
-                var file = Assembly.GetEntryAssembly().Location;
+                var file = AppDomain.CurrentDomain.BaseDirectory;
                 if (!path.Contains(file))
                 {
                     Environment.SetEnvironmentVariable("Path", path + ";" + file);
                 }
-                  path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "install.reg");
-                Process.Start(path);
+                //path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "install.reg");
+                //Process.Start(path);
 
                 //var path = "Folder\\shell\\NetDisk|directory\\Background\\shell\\NetDisk".Split('|');
 

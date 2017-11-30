@@ -22,7 +22,7 @@ namespace Bzway.Writer.App
         {
             get
             {
-                return this.configuration.GetValue<string>("applicationUrl", "http://localhost:9999");
+                return this.siteData.Get<string>("baseurl", this.configuration.GetValue<string>("applicationUrl", "http://localhost:9999"));
             }
         }
         public string Broswer
@@ -182,7 +182,6 @@ namespace Bzway.Writer.App
         {
             Directory.Delete(this.PublicDirectory, true);
         }
-
         public string Generate(string url = "")
         {
             var returnValue = string.Empty;

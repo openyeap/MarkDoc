@@ -10,9 +10,8 @@ namespace Bzway.Writer.App
     public class HelpCommand : ICommand
     {
         public string Name => "help";
-        public void Execute(IEnumerable<string> args)
-        {
-           var helpText = @"
+
+        public string Usage => @"
 Usage:
 mdoc command [options]
 
@@ -46,7 +45,10 @@ Command: Run
        --cleantarget          Delete the target directory(_site by default)
        --vDir = VALUE           Rewrite url's to work inside the specified virtual directory
 ";
-            Console.Write(helpText);
+
+        public void Execute(IEnumerable<string> args)
+        {
+            Console.Write(this.Usage);
         }
     }
 }

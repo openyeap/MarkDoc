@@ -12,6 +12,7 @@ namespace Bzway.Writer.App
     public class RunCommand : ICommand
     {
         public string Name => "Run";
+        public string Usage => string.Empty;
         public void Execute(IEnumerable<string> args)
         {
             var root = Directory.GetCurrentDirectory();
