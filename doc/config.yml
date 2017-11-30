@@ -12,7 +12,7 @@ asset_dir: asset
 public_dir: public
 
 # Writing
-default_theme: api
+default_theme: doc
 default_layout: default
 date_format: YYYY-MM-DD
 time_format: HH:mm:ss

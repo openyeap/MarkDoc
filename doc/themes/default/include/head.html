@@ -2,15 +2,12 @@
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <!--<meta name="viewport" content="width=device-width, initial-scale=1" />-->
-
 <title>
-    {% if page.title %} {{ page.title }} {% endif %}
-    {% if site.title %} {{ site.title }} {% endif %}
+    {% if page.title %} {{ page.title }} {% endif %}{% if site.title %} {{ site.title }} {% endif %}
 </title>
-
 <meta name="description" content="{{ page.description | default: site.description }}">
 <meta name="author" content="{{ page.author | default: site.author }}">
-<link href="{{ '/css/styles.css' | prepend: site.baseurl }}" rel="stylesheet">
 <link href="{{ '/css/bootstrap.min.css' | prepend: site.baseurl }}" rel="stylesheet" />
+<link href="{{ '/css/styles.css' | prepend: site.baseurl }}" rel="stylesheet">
 <link href="{{ '/rss.xml' | prepend: site.baseurl }}" type="application/rss+xml" rel="alternate" title="Blog Feed" />
 <link href="{{ '/atom.xml' | prepend: site.baseurl }}" type="application/atom+xml" rel="alternate" title="Blog Feed" />

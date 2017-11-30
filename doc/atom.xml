@@ -13,7 +13,7 @@ layout: nil
     <email>{{ site.contact }}</email>
   </author>
 
-  {% for post in site.posts %}
+  {% for post in site.pages %}
   <entry>
     <id>{{ site.url }}{{ post.url }}</id>
     <link type="text/html" rel="alternate" href="{{ site.url }}{{ post.url }}"/>

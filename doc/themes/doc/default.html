@@ -4,17 +4,18 @@
 <body>
     <div id="container">
         <div id="side">
-            <a href="/" id="home" title="home" alt="home"><img src="/img/logo.png" alt="Site Name" /></a>
+            <a href="/" id="home" title="home" alt="home"><img src="/img/logo.jpg" alt="Site Name" /></a>
             <div id="hometext"><a href="/">{{ site.title }}</a></div>
             <div class="section">
                 <ul>
                     <li><a href="/about.html">about</a></li>
-                    <li><a href="/rss.xml"><img src="/img/25.png" /> feed</a></li>
+                    <li><a href="/rss.xml"><img src="/img/feed.jpg" />Feed</a></li>
                 </ul>
             </div>
         </div>
         <div id="content">
-            {{content}}
+            {{ content }}
+            <img src="/img/feed.jpg" />
         </div>
     </div>
     <script src="//cdn.jsdelivr.net/highlight.js/9.4.0/highlight.min.js"></script>
