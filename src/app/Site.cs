@@ -120,15 +120,20 @@ namespace Bzway.Writer.App
             configFile = Path.Combine(this.workDirectory, "config.json");
             if (File.Exists(configFile))
             {
-                foreach (var item in ConfigFileHelp.Default.ParseJson(File.ReadAllText(configFile)))
+                var jsonObject = ConfigFileHelp.Default.ParseJson(File.ReadAllText(configFile));
+                if (jsonObject != null && jsonObject is Dictionary<string, object>)
                 {
-                    if (dict.ContainsKey(item.Key))
+                    var list = (Dictionary<string, object>)jsonObject;
+                    foreach (var item in list)
                     {
-                        dict[item.Key] = item.Value;
-                    }
-                    else
-                    {
-                        dict.Add(item.Key, item.Value);
+                        if (dict.ContainsKey(item.Key))
+                        {
+                            dict[item.Key] = item.Value;
+                        }
+                        else
+                        {
+                            dict.Add(item.Key, item.Value);
+                        }
                     }
                 }
             }
@@ -177,14 +182,16 @@ namespace Bzway.Writer.App
         {
             Directory.Delete(this.PublicDirectory, true);
         }
-        public void Generate()
+
+        public string Generate(string url = "")
         {
+            var returnValue = string.Empty;
             var themePath = Path.Combine(this.ThemesDirectory, this.DefaultTheme);
 
             Template.FileSystem = new LayoutFileSystem(new PhysicalFileProvider(this.PostDirectory), new PhysicalFileProvider(themePath));
-            Template.RegisterTag<IncrementTag>("increment");
-
+            Template.RegisterFilter(typeof(IncrementFilter));
             var theme = new Theme(themePath);
+
             foreach (var path in theme.Assets)
             {
                 var destFileName = Path.Combine(this.PublicDirectory, path.Remove(0, theme.Root.Length + 1));
@@ -212,19 +219,32 @@ namespace Bzway.Writer.App
                 switch (fileInfo.Extension)
                 {
                     case ".json":
-                        dict = new Dictionary<string, object>();
-                        foreach (var item in ConfigFileHelp.Default.ParseJson(File.ReadAllText(path)))
+                        var jsonObject = ConfigFileHelp.Default.ParseJson(File.ReadAllText(path));
+                        if (jsonObject == null)
                         {
-                            if (dict.ContainsKey(item.Key))
-                            {
-                                dict[item.Key] = item.Value;
-                            }
-                            else
-                            {
-                                dict.Add(item.Key, item.Value);
-                            }
+                            continue;
                         }
-                        data.Add(key, Hash.FromDictionary(dict));
+                        if (jsonObject is List<Dictionary<string, object>>)
+                        {
+                            data.Add(key, jsonObject);
+                        }
+                        else
+                        {
+                            var list = (Dictionary<string, object>)jsonObject;
+                            dict = new Dictionary<string, object>();
+                            foreach (var item in list)
+                            {
+                                if (dict.ContainsKey(item.Key))
+                                {
+                                    dict[item.Key] = item.Value;
+                                }
+                                else
+                                {
+                                    dict.Add(item.Key, item.Value);
+                                }
+                            }
+                            data.Add(key, Hash.FromDictionary(dict));
+                        }
                         break;
                     case ".yaml":
                         dict = new Dictionary<string, object>();
@@ -246,58 +266,8 @@ namespace Bzway.Writer.App
                 }
             }
 
-            data.Remove("menu");
-            data.Add("menu", JsonConvert.DeserializeObject<List<menu>>(File.ReadAllText(this.DataDirectory + "/menu.json")));
             foreach (var item in pageList)
             {
-                item.Save(this.PublicDirectory, this.siteData, data, theme);
-            }
-
-        }
-        public string View(string url)
-        {
-            var returnValue = string.Empty;
-            var themePath = Path.Combine(this.ThemesDirectory, this.DefaultTheme);
-            Template.FileSystem = new LayoutFileSystem(new PhysicalFileProvider(this.PostDirectory), new PhysicalFileProvider(themePath));
-            var theme = new Theme(themePath);
-
-            var pageList = this.LoadPages();
-            if (this.siteData.ContainsKey("pages"))
-            {
-                this.siteData.Remove("pages");
-            }
-            this.siteData.Add("pages", pageList);
-
-            foreach (var path in theme.Assets)
-            {
-                var destFileName = Path.Combine(this.PublicDirectory, path.Remove(0, theme.Root.Length + 1));
-                var fi = new FileInfo(destFileName);
-                if (!fi.Directory.Exists)
-                {
-                    fi.Directory.Create();
-                }
-                File.Copy(path, destFileName, true);
-            }
-            Hash data = new Hash();
-            foreach (var item in Directory.GetFiles(this.DataDirectory, "*.*", SearchOption.TopDirectoryOnly))
-            {
-                FileInfo fileInfo = new FileInfo(item);
-                var key = fileInfo.Name.Substring(0, fileInfo.Name.LastIndexOf('.'));
-                switch (fileInfo.Extension)
-                {
-                    case ".json":
-                        data.Add(key, ConfigFileHelp.Default.ParseJson(File.ReadAllText(item)));
-                        break;
-                    case ".yaml":
-                        data.Add(key, ConfigFileHelp.Default.ParseYaml(File.ReadAllText(item)));
-                        break;
-                    default:
-                        break;
-                }
-            }
-            foreach (var item in pageList)
-            {
-
                 item.Save(this.PublicDirectory, this.siteData, data, theme);
                 if (item.url == url)
                 {
@@ -309,7 +279,7 @@ namespace Bzway.Writer.App
     }
 
 
-    public class menu  : DotLiquid.Drop
+    public class menu : DotLiquid.Drop
     {
         public string name { get; set; }
 

@@ -35,6 +35,6 @@
     public interface ISite
     {
         string Upsert(string name);
-        void Generate();
+        string Generate(string url = "");
     }
 }

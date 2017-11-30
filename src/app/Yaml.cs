@@ -33,7 +33,6 @@ namespace Bzway.Writer.App
             var results = new Dictionary<string, object>();
 
             var input = new StringReader(text);
-
             var yaml = new YamlStream();
             yaml.Load(input);
 
@@ -43,7 +42,6 @@ namespace Bzway.Writer.App
             }
 
             var root = yaml.Documents[0].RootNode;
-
             var collection = root as YamlMappingNode;
             if (collection != null)
             {
@@ -58,7 +56,6 @@ namespace Bzway.Writer.App
             }
             return results;
         }
-
         private static object GetValue(YamlNode value)
         {
             var collection = value as YamlMappingNode;
@@ -112,27 +109,53 @@ namespace Bzway.Writer.App
 
             return value.ToString();
         }
-        public Dictionary<string, object> ParseJson(string input)
+        public object ParseJson(string input)
         {
-            var values2 = new Dictionary<string, object>();
-            try
+            var json = JsonConvert.DeserializeObject<JToken>(input);
+            switch (json.Type)
             {
-                var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(input);
-                foreach (KeyValuePair<string, object> d in values)
-                {
-                    if (d.Value is JObject)
-                    {
-                        values2.Add(d.Key, ParseJson(d.Value.ToString()));
-                    }
-                    else
-                    {
-                        values2.Add(d.Key, d.Value);
-                    }
-                }
-
+                case JTokenType.Object:
+                    return ParseJsonObject((JObject)json);
+                case JTokenType.Array:
+                    return ParseJsonArray((JArray)json);
             }
-            catch { }
-            return values2;
+            return null;
+        }
+        private List<Dictionary<string, object>> ParseJsonArray(JArray input)
+        {
+            var list = new List<Dictionary<string, object>>();
+            foreach (JToken item in input)
+            {
+                switch (item.Type)
+                {
+                    case JTokenType.Object:
+                        list.Add(ParseJsonObject((JObject)item));
+                        break;
+                }
+            }
+            return list;
+        }
+
+        private Dictionary<string, object> ParseJsonObject(JObject input)
+        {
+            var results = new Dictionary<string, object>();
+
+            foreach (KeyValuePair<string, JToken> d in input)
+            {
+                switch (d.Value.Type)
+                {
+                    case JTokenType.Object:
+                        results.Add(d.Key, ParseJsonObject((JObject)d.Value));
+                        break;
+                    case JTokenType.Array:
+                        results.Add(d.Key, ParseJsonArray((JArray)d.Value));
+                        break;
+                    default:
+                        results.Add(d.Key, d.Value.Value<string>());
+                        break;
+                }
+            }
+            return results;
         }
     }
 }

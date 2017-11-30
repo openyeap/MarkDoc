@@ -1,13 +1,10 @@
-﻿
-
-
-<div class="panel panel-primary">
-    <div class="panel-heading panel-head">Author Book Tree View</div>
+﻿<div class="panel panel-primary">
+    <div class="panel-heading panel-head">{{data.navigation.title}}</div>
     <div id="frm-author" class="panel-body">
-        <div class="tree" style="overflow-y:  auto; overflow-x: hidden; height: 500px;">
-            {% assign level1 = 1 %}
+        <div>
+            {% assign level1 = "0"   %}
             {% for item in data.navigation.child %}
-            {% increment level1 %}
+            {% assign level1 = level1 | increment  %}
             <ul style="list-style: none; margin: 0px 0px 0px -40px;">
                 <li>
                     <a href="{{ item.path | prepend: site.baseurl }}">
@@ -15,9 +12,9 @@
                             <strong>{{level1}}.{{item.name}}</strong>
                         </label>
                     </a>
-                    {% assign level2 = 1 %}
+                    {% assign level2 = "0" %}
                     {% for subitem in item.child %}
-                    {% increment level2 %}
+                    {% assign level2 = level2 |increment  %}
                     <ul style="list-style: none; margin: 0px 0px 0px -30px;">
                         <li>
                             <a href="{{ subitem.path | prepend: site.baseurl }}">
@@ -25,9 +22,9 @@
                                     <strong>{{level1}}.{{level2}}.{{subitem.name}}</strong>
                                 </label>
                             </a>
-                            {% assign level3 = 1 %}
+                            {% assign level3 = "0" %}
                             {% for subsubitem in subitem.child %}
-                            {% increment level3 %}
+                            {% assign level3 = level3 |increment  %}
                             <ul style="list-style: none; margin: 0px 0px 0px -20px;">
                                 <li>
                                     <a href="{{ subsubitem.path | prepend: site.baseurl }}">

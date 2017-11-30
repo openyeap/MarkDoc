@@ -4,28 +4,31 @@ auth:  Adm Zhu
 child: 
  -
   path:  '/Folder1'
-  name:  "第一章"
+  name:  "简介"
   child: 
    -
     path:  '/'
-    name:  第一节
-    child: 
-     -
-      path: '/'
-      name:  第一节
-     -
-      path: '/'
-      name:  "1.1.2"
-     -
-      path:  '/'
-      name:  "1.1.3"
-     -
-      path: '/'
-      name: "1.1.4"
+    name:  背景
+   -
+    path:  '/'
+    name:  说明
  -
   path:  '/'
-  name:  "第二章"
+  name:  "技术实现"
   child: 
    -
     path: '/'
-    name: '第一节'
+    name: '用户'
+    child: 
+     -
+      path: '/'
+      name:  登录
+     -
+      path: '/'
+      name:  "注册"
+     -
+      path:  '/'
+      name:  "退出"
+     -
+      path: '/'
+      name: "修改信息"

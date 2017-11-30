@@ -1,22 +1,16 @@
-{
+ï»¿{
   "navigation": {
     "uid": "guid",
-    "title": "ÎÒµÄÎÄµµ",
+    "title": "æˆ‘çš„æ–‡æ¡£",
     "auth": "Adm Zhu",
     "child": [
       {
         "path": "/Folder1",
-        "name": "µÚÒ»ÕÂ",
-        "child": [
-          {
-            "path": "/",
-            "name": "µÚÒ»½Ú"
-          }
-        ]
+        "name": "ç¬¬ä¸€ç« "
       },
       {
         "path": "/",
-        "name": "µÚ¶þÕÂ"
+        "name": "ç¬¬äºŒç« "
       }
     ]
   }
