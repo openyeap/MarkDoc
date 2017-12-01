@@ -13,8 +13,15 @@ namespace Bzway.Writer.App
 
     public class Git : IGit
     {
+        string root;
+        string auth;
+        public Git(string auth = "")
+        {
+            this.root = Directory.GetCurrentDirectory();
+            this.auth = auth;
+        }
 
-        public void Set(string root, string auth, string comments)
+        public void Set(string comments, string version = "")
         {
             #region 1. 遍历工作目录中所有文件
             var files = this.GetFiles(root);
@@ -44,19 +51,29 @@ namespace Bzway.Writer.App
             #endregion
 
         }
-        public void Get(string root, string version)
+        public void Get(string version)
         {
-            var listOfVersion = GetVersions(root).Where(m => m.Id.Contains(version)).ToArray();
-            if (listOfVersion.Length != 1)
+            var list = this.GetVersions(this.root).OrderByDescending(m => m.Time).ToList();
+            var findedVersion = list.Where(m => m.Id.Contains(version)).FirstOrDefault();
+            if (findedVersion==null                )
             {
-                foreach (var item in GetVersions(root))
+                var cmd = string.Empty;
+                int i = 1;
+                do
                 {
-                    Console.WriteLine(item.Id);
-                }
+                    Console.Clear();
+                    foreach (var item in list.Take(5 * i))
+                    {
+                        Console.WriteLine($"{item.Id} {item.Time} {item.Auth} {item.Comments}");
+                    }
+                    Console.WriteLine("any key for more or enter to exit");
+                    cmd = Console.ReadLine();
+                    i++;
+                } while (!string.IsNullOrEmpty(cmd));
                 return;
             }
             Dictionary<string, string> dictionary;
-            var dataFilePath = Path.Combine(root, ".git", "data", listOfVersion[0].Id);
+            var dataFilePath = Path.Combine(root, ".git", "data", findedVersion.Id);
 
             using (Stream stream = new FileStream(dataFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
             {
@@ -237,15 +254,7 @@ namespace Bzway.Writer.App
             throw new NotImplementedException();
         }
 
-        public void Get(string version)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void Set(string comments, string version)
-        {
-            throw new NotImplementedException();
-        }
 
         public void Pull(string url)
         {

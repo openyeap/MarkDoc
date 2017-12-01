@@ -40,6 +40,14 @@ namespace Bzway.Writer.App
             var filePath = site.Upsert(docPath);
             Process.Start(site.Editor, filePath);
         }
-        public string Usage { get { return "mdoc edit [-p|-path] value"; } }
+        public string Usage
+        {
+            get
+            {
+                return @"
+Command: edit [-p|-path]
+    -p, --path VALUE             The path of file to create or modify";
+            }
+        }
     }
 }

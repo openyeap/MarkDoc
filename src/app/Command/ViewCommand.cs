@@ -10,8 +10,11 @@ namespace Bzway.Writer.App
 {
     public class ViewCommand : ICommand
     {
-        public string Name => "View";
-        public string Usage => string.Empty;
+        public string Name => "view";
+        public string Usage => @"Command: view
+    -p, --path = VALUE           The related path to view
+                                 virtual directory
+";
         public void Execute(IEnumerable<string> args)
         {
             var server = new Site();

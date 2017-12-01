@@ -11,7 +11,10 @@ namespace Bzway.Writer.App
     {
         public string Name => "g|Generate";
 
-        public string Usage => string.Empty;
+        public string Usage => @"
+Command: g|generate
+    -p, --path VALUE             The path of file to generate
+";
 
         public void Execute(IEnumerable<string> args)
         {

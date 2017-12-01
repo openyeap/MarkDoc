@@ -11,8 +11,14 @@ namespace Bzway.Writer.App
 {
     public class RunCommand : ICommand
     {
-        public string Name => "Run";
-        public string Usage => string.Empty;
+        public string Name => "run";
+        public string Usage => @"
+Command: run
+    -t, --template = VALUE       The templating engine to use
+    -p, --port = VALUE           The port to test the site locally
+        --cleantarget            Delete the target directory(_site by default)
+        --vDir = VALUE           Rewrite url's to work inside the specified virtual directory
+";
         public void Execute(IEnumerable<string> args)
         {
             var root = Directory.GetCurrentDirectory();
